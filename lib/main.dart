@@ -1,3 +1,4 @@
+import 'package:delivery_app/OTPverification_screen.dart';
 import 'package:delivery_app/onboarding_screen1.dart';
 import 'package:delivery_app/signup_screen.dart';
 import 'package:delivery_app/verification_screen.dart';
@@ -16,7 +17,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: VerificationScreen(),
+      home: OtpVerificationScreen(
+        method: VerificationMethod.sms,
+        destination: '+2348054551951',
+      ),
     );
   }
 }
