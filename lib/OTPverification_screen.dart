@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 enum VerificationMethod { sms, email }
 
@@ -21,6 +22,41 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     6,
     (_) => TextEditingController(),
   );
+
+  // Timer for OTP expiration and resend logic
+  int _secondsRemaining = 60;
+  Timer? _timer;
+  bool _canResend = false;
+
+  @override
+  void initState() {
+    super.initState();
+    startTimer();
+  }
+
+  void startTimer() {
+    _secondsRemaining = 60;
+    _canResend = false;
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_secondsRemaining > 0) {
+        setState(() {
+          _secondsRemaining--;
+        });
+      } else {
+        setState(() {
+          _canResend = true;
+        });
+        _timer?.cancel();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   final List<FocusNode> _focusNodes = List.generate(6, (_) => FocusNode());
 
@@ -105,10 +141,18 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextButton(
-                  onPressed: () {},
+                  onPressed: _canResend
+                      ? () {
+                          startTimer();
+                        }
+                      : null,
                   child: Text(
-                    'Resend code',
-                    style: TextStyle(color: Colors.black),
+                    _canResend
+                        ? 'Resend OTP'
+                        : 'Resend in $_secondsRemaining seconds',
+                    style: TextStyle(
+                      color: _canResend ? Colors.green : Colors.grey,
+                    ),
                   ),
                 ),
               ],
