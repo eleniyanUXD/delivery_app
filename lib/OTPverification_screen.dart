@@ -148,7 +148,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       : null,
                   child: Text(
                     _canResend
-                        ? 'Resend OTP'
+                        ? 'Resend code'
                         : 'Resend in $_secondsRemaining seconds',
                     style: TextStyle(
                       color: _canResend ? Colors.green : Colors.grey,
