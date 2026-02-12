@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-enum verificationMethod { sms, Email }
+enum verificationMethod {sms, Email}
 
 verificationMethod? _selectedmethod;
 
