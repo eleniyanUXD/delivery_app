@@ -1,5 +1,5 @@
 import 'package:delivery_app/OTPverification_screen.dart';
-import 'package:delivery_app/forgotpassword_password.dart';
+import 'package:delivery_app/forgotpassword_screen.dart';
 import 'package:delivery_app/onboarding_screen1.dart';
 import 'package:delivery_app/signup_screen.dart';
 import 'package:delivery_app/verification_screen.dart';
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ForgotPasswordScreen()
+      home: ForgotPasswordScreen(),
       );
   }
 }

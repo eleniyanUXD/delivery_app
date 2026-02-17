@@ -12,6 +12,7 @@ class ForgotPasswordScreen extends StatefulWidget {
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final TextEditingController _emailController = TextEditingController();
   bool _isLoading = false;
+  String? _successMessage;
   String? _errorMessage;
 
   @override
@@ -39,7 +40,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
     setState(() {
       _isLoading = false;
-      _errorMessage = 'Reset link sent to $email. Please check your inbox.';
+      _successMessage = 'Reset link sent to $email. Please check your inbox.';
     });
   }
 
@@ -115,10 +116,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ),
               child: const Text('Send Link'),
             ),
-            if (_errorMessage != null) ...[
+            if (_successMessage != null) ...[
               SizedBox(height: 16),
-              Text(_errorMessage!, style: TextStyle(color: Colors.green)),
+              Text(_successMessage!, style: TextStyle(color: Colors.green)),
             ],
+            if (_errorMessage != null && _errorMessage!.isNotEmpty) ...[
+              SizedBox(height: 16),
+              Text(_errorMessage!, style: TextStyle(color: Colors.red)),
+            ]
           ],
         ),
       ),
