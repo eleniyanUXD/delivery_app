@@ -79,6 +79,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             //Email text field
             TextField(
               controller: _emailController,
+              onChanged: (_) {
+                if (_errorMessage != null || _successMessage != null) {
+                  setState(() {
+                    _errorMessage = null;
+                    _successMessage = null;
+                  });
+                }
+              },
               decoration: InputDecoration(
                 labelText: 'Enter your email',
                 contentPadding: EdgeInsets.symmetric(
@@ -94,6 +102,25 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 ),
               ),
             ),
+
+            // Error message
+            if (_errorMessage != null && _errorMessage!.isNotEmpty) ...[
+              SizedBox(height: 12),
+              Text(
+                _errorMessage!,
+                style: TextStyle(color: Colors.red, fontSize: 14),
+              ),
+            ],
+
+            // Success message
+            if (_successMessage != null && _successMessage!.isNotEmpty) ...[
+              SizedBox(height: 12),
+              Text(
+                _successMessage!,
+                style: TextStyle(color: Colors.green, fontSize: 14),
+              ),
+            ],
+
             SizedBox(height: 50),
 
             // Send reset link butoon
@@ -116,14 +143,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ),
               child: const Text('Send Link'),
             ),
-            if (_successMessage != null) ...[
-              SizedBox(height: 16),
-              Text(_successMessage!, style: TextStyle(color: Colors.green)),
-            ],
-            if (_errorMessage != null && _errorMessage!.isNotEmpty) ...[
-              SizedBox(height: 16),
-              Text(_errorMessage!, style: TextStyle(color: Colors.red)),
-            ]
           ],
         ),
       ),
