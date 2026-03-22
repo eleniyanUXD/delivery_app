@@ -10,6 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  carousel_slider: ^4.2.1  
 
   flutter_svg: ^2.2.3
 
@@ -28,3 +29,32 @@ flutter:
     - assets/images/google.svg
     - assets/images/sms.svg
     - assets/images/email.svg
+    - assets/images/avatar.png
+    - assets/images/banner.png
+    - assets/images/terra.png
+    - assets/images/McDonald.png
+    - assets/images/KFC.png
+    - assets/images/chillox.png
+    - assets/images/yakoyo.png
+    - assets/images/chicken.png
+    - assets/images/shawarma.png
+    - assets/images/pizza.png
+    - assets/images/jollof rice.png
+    - assets/images/drinks.png
+    - assets/images/white rice.png
+    - assets/images/spaghetti.png
+    - assets/images/shawarmaa.png
+    - assets/images/pizzaa.png
+    - assets/images/hamburger.png
+    - assets/images/vegetable.png
+    - assets/images/seafoodokro.png
+    - assets/images/chickenn.png
+    - assets/images/pasta.png
+    - assets/images/chickensalad.png
+    - assets/images/moimoi.png
+    - assets/images/spicynoodles.png
+    - assets/images/beefsalad.png
+    - assets/images/eggpizza.png
+    - assets/images/peppersoup.png
+    - assets/images/jollofrice.png
+
