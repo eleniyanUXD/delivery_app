@@ -1,3 +1,4 @@
+import 'package:delivery_app/fooddetails._screen.dart';
 import 'package:delivery_app/home_screen.dart';
 import 'package:delivery_app/restaurant_screen.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: RestaurantScreen(),
-      );
+      home: FoodDetailsScreen(),
+    );
   }
 }
