@@ -77,7 +77,7 @@ class _OnboardingScreenState extends State<OnboardingScreen1> {
                   foregroundColor: Colors.white,
                   padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   textStyle: TextStyle(
                     fontSize: 16,

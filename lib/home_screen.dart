@@ -1,4 +1,7 @@
+import 'cart_data.dart';
+import 'cart_item.dart';
 import 'package:flutter/material.dart';
+import 'cart_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,11 +15,55 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
   Set<int> favorites = {};
+  int cartItemCount = 0;
 
   @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+
+  void addToCart(Map<String, dynamic> item) {
+     print("ADDING ITEM IMAGE: ${item['image']}");
+    final index = cartItems.indexWhere(
+      (cartItem) => cartItem.title == item['title'],
+    );
+
+    if (index != -1) {
+      cartItems[index].quantity++;
+    } else {
+      final priceValue = item['price'] is String
+          ? double.tryParse(
+                  item['price'].toString().replaceAll(RegExp(r'[^0-9.]'), ''),
+                ) ??
+                0.0
+          : (item['price'] is num ? item['price'].toDouble() : 0.0);
+
+      cartItems.add(
+        CartItem(
+          id: item['title'].toString().hashCode,
+          title: item['title'].toString(),
+          subtitle: item['subtitle']?.toString() ?? '',
+          image: item['image']?.toString() ?? '',
+          price: priceValue,
+          quantity: 1,
+        ),
+      );
+    }
+  }
+
+  void incrementCartItemCount() {
+    setState(() {
+      cartItemCount++;
+    });
+  }
+
+  void decrementCartItemCount() {
+    setState(() {
+      if (cartItemCount > 0) {
+        cartItemCount--;
+      }
+    });
   }
 
   final List<Map<String, String>> _categories = [
@@ -140,7 +187,20 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      addToCart({
+                        'title': name,
+                        'price': price,
+                        'image': image,
+                        'subtitle': 'Subtitle',
+                      });
+                    });
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Added to cart')),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                   ),
@@ -300,7 +360,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             border: Border.all(color: Colors.grey, width: 0.5),
                           ),
                           child: IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => CartScreen()),
+                              );
+                            },
                             icon: Icon(
                               Icons.shopping_cart,
                               color: Colors.green,

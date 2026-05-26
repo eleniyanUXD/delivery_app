@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'social_button.dart'; 
+import 'social_button.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -154,7 +154,7 @@ class _SignupScreenState extends State<SignupScreen> {
               // Divider with "Or"
               Row(
                 children: const [
-                  Expanded(child: Divider(color: Colors.grey),),
+                  Expanded(child: Divider(color: Colors.grey)),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8),
                     child: Text(
@@ -210,10 +210,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     onPressed: () {},
                     child: const Text(
                       'Sign in',
-                      style: TextStyle(
-                        color: Colors.green,
-                        fontSize: 14,
-                      ),
+                      style: TextStyle(color: Colors.green, fontSize: 14),
                     ),
                   ),
                 ],
