@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:delivery_app/widgets/food_card.dart';
 import 'cart_data.dart';
 import 'widgets/cart_summary.dart';
+import 'checkout_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -98,8 +99,16 @@ class _CartScreenState extends State<CartScreen> {
                 CartSummary(
                   subtotal: getSubTotal(),
                   deliveryFee: deliveryFee,
+                  buttonText: "Proceed to Checkout",
                   onCheckout: () {
-                    print('Checkout clicked');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return CheckoutScreen();
+                        },
+                      ),
+                    );
                   },
                 ),
               ],

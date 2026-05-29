@@ -4,12 +4,14 @@ class CartSummary extends StatelessWidget {
   final double subtotal;
   final double deliveryFee;
   final VoidCallback onCheckout;
+  final String buttonText;
 
   const CartSummary({
     super.key,
     required this.subtotal,
     required this.deliveryFee,
     required this.onCheckout,
+    required this.buttonText,
   });
 
   @override
@@ -62,8 +64,8 @@ class CartSummary extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Text(
-                "Proceed to Checkout",
+              child: Text(
+                buttonText,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,
