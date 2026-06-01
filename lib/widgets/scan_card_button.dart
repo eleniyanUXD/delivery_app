@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-class AddNewCardButton extends StatelessWidget {
+class ScanCardButton extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
-  final IconData icon;
+  final String icon;
 
-  const AddNewCardButton({
+  const ScanCardButton({
     super.key,
     required this.text,
     required this.onTap,
@@ -25,7 +26,7 @@ class AddNewCardButton extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, color: Colors.black, size: 20),
+          SvgPicture.asset(icon, color: Colors.black, height: 24, width: 24),
           const SizedBox(width: 8),
           Text(
             text,

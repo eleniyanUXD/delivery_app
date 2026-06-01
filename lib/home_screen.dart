@@ -2,6 +2,7 @@ import 'cart_data.dart';
 import 'cart_item.dart';
 import 'package:flutter/material.dart';
 import 'cart_screen.dart';
+import 'widgets/custom_bottom_nav_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void addToCart(Map<String, dynamic> item) {
-     print("ADDING ITEM IMAGE: ${item['image']}");
+    print("ADDING ITEM IMAGE: ${item['image']}");
     final index = cartItems.indexWhere(
       (cartItem) => cartItem.title == item['title'],
     );
@@ -573,59 +574,13 @@ class _HomeScreenState extends State<HomeScreen> {
           : _pages[_selectedIndex],
 
       //Bottom nav bar
-      bottomNavigationBar: NavigationBarTheme(
-        data: NavigationBarThemeData(
-          iconTheme: WidgetStateProperty.resolveWith<IconThemeData>((states) {
-            if (states.contains(WidgetState.selected)) {
-              return const IconThemeData(color: Colors.green);
-            }
-            return const IconThemeData(
-              color: Color.fromARGB(255, 185, 181, 181),
-            );
-          }),
-          labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>((states) {
-            if (states.contains(WidgetState.selected)) {
-              return const TextStyle(color: Colors.green);
-            }
-            return const TextStyle(color: Colors.grey);
-          }),
-        ),
-        child: NavigationBar(
-          height: 80,
-          selectedIndex: _selectedIndex,
-
-          onDestinationSelected: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
-
-          destinations: [
-            NavigationDestination(
-              icon: Icon(Icons.home_outlined),
-              selectedIcon: Icon(Icons.home),
-              label: 'Home',
-            ),
-
-            NavigationDestination(
-              icon: Icon(Icons.chat_outlined),
-              selectedIcon: Icon(Icons.chat),
-              label: 'Chat',
-            ),
-
-            NavigationDestination(
-              icon: Icon(Icons.favorite_outlined),
-              selectedIcon: Icon(Icons.favorite),
-              label: 'Favorite',
-            ),
-
-            NavigationDestination(
-              icon: Icon(Icons.account_circle_outlined),
-              selectedIcon: Icon(Icons.account_circle),
-              label: 'Profile',
-            ),
-          ],
-        ),
+      bottomNavigationBar: CustomBottomNavBar(
+        currentIndex: _selectedIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
       ),
     );
   }

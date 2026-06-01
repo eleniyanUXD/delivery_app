@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'widgets/checkout_details_card.dart';
 import 'widgets/cart_summary.dart';
 import 'cart_data.dart';
+import 'payment_detail_screen.dart';
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});
@@ -120,7 +121,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           Center(
             child: AddNewCardButton(
               text: 'Add new card',
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PaymentDetailScreen(),
+                  ),
+                );
+              },
               icon: Icons.add,
             ),
           ),
