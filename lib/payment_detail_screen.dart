@@ -3,6 +3,7 @@ import 'widgets/card_input_field.dart';
 import 'widgets/scan_card_button.dart';
 import 'widgets/check_box_field.dart';
 import 'widgets/app_button.dart';
+import 'success_screen.dart';
 
 class PaymentDetailScreen extends StatefulWidget {
   const PaymentDetailScreen({super.key});
@@ -121,7 +122,19 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              AppButton(text: 'Pay Now', onTap: () {}),
+              AppButton(
+                text: 'Pay Now',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const SuccessScreen();
+                      },
+                    ),
+                  );
+                },
+              ),
               SizedBox(height: 16),
               AppButton(text: 'Cancel', onTap: () {}, isOutlined: true),
             ],
