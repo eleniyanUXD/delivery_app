@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'widgets/success_card.dart';
 import 'widgets/app_button.dart';
 import 'home_screen.dart';
+import 'order_status_screen.dart';
 
 class SuccessScreen extends StatelessWidget {
   const SuccessScreen({super.key});
@@ -29,7 +30,14 @@ class SuccessScreen extends StatelessWidget {
               AppButton(
                 text: 'Track your Order',
                 onTap: () {
-                  // Navigate to order tracking screen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const OrderStatusScreen();
+                      },
+                    ),
+                  );
                 },
               ),
               SizedBox(height: 16),
