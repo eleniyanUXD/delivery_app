@@ -3,6 +3,9 @@ import 'cart_item.dart';
 import 'package:flutter/material.dart';
 import 'cart_screen.dart';
 import 'widgets/custom_bottom_nav_bar.dart';
+import 'Chat_screen.dart';
+import 'favorite_screen.dart';
+import 'profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -240,13 +243,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  int _selectedIndex = 0;
+  int currentIndex = 0;
 
-  final List<Widget> _pages = [
-    Center(child: Text('Home')),
-    Center(child: Text('Chat')),
-    Center(child: Text('Favorite')),
-    Center(child: Text('Profile')),
+  final List<Widget> screens = [
+    const HomeScreen(), // your main home UI
+    const ChatScreen(),
+    const FavoriteScreen(),
+    const ProfileScreen(),
   ];
 
   String query = '';
@@ -262,7 +265,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }).toList();
 
     return Scaffold(
-      body: _selectedIndex == 0
+      body: currentIndex == 0
           ? SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 50, 16, 8),
@@ -571,14 +574,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             )
-          : _pages[_selectedIndex],
+          : screens[currentIndex],
 
       //Bottom nav bar
       bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _selectedIndex,
+        currentIndex: currentIndex,
         onTap: (index) {
           setState(() {
-            _selectedIndex = index;
+            currentIndex = index;
           });
         },
       ),
