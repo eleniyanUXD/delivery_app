@@ -30,10 +30,10 @@ class ChatInputField extends StatelessWidget {
         const SizedBox(width: 12),
         Expanded(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
             decoration: BoxDecoration(
               color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(30),
             ),
             child: TextField(
               controller: controller,
