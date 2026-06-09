@@ -6,6 +6,8 @@ import 'widgets/custom_bottom_nav_bar.dart';
 import 'Chat_screen.dart';
 import 'favorite_screen.dart';
 import 'profile_screen.dart';
+import 'models/favorite_data.dart';
+import 'widgets/dish_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,7 +20,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
-  Set<int> favorites = {};
   int cartItemCount = 0;
 
   @override
@@ -223,18 +224,26 @@ class _HomeScreenState extends State<HomeScreen> {
             child: IconButton(
               onPressed: () {
                 setState(() {
-                  if (favorites.contains(index)) {
-                    favorites.remove(index);
+                  final item = {'name': name, 'image': image, 'price': price};
+
+                  final exists = favoriteFoods.any(
+                    (food) => food['name'] == name,
+                  );
+
+                  if (exists) {
+                    favoriteFoods.removeWhere((food) => food['name'] == name);
                   } else {
-                    favorites.add(index);
+                    favoriteFoods.add(item);
                   }
                 });
               },
               icon: Icon(
-                favorites.contains(index)
+                favoriteFoods.any((food) => food['name'] == name)
                     ? Icons.favorite
                     : Icons.favorite_border,
-                color: favorites.contains(index) ? Colors.red : Colors.grey,
+                color: favoriteFoods.any((food) => food['name'] == name)
+                    ? Colors.red
+                    : Colors.grey,
               ),
             ),
           ),
@@ -562,11 +571,51 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                       itemBuilder: (context, index) {
                         final food = _popularFood[index];
-                        return dishCard(
-                          index: index,
+                        return DishCard(
                           name: food['name']!,
                           image: food['image']!,
                           price: food['price']!,
+                          isFavorite: favoriteFoods.any(
+                            (f) => f['name'] == food['name'],
+                          ),
+
+                          onFavoriteToggle: () {
+                            setState(() {
+                              final item = {
+                                'name': food['name']!,
+                                'image': food['image']!,
+                                'price': food['price']!,
+                              };
+
+                              final exists = favoriteFoods.any(
+                                (f) => f['name'] == food['name'],
+                              );
+
+                              if (exists) {
+                                favoriteFoods.removeWhere(
+                                  (f) => f['name'] == food['name'],
+                                );
+                              } else {
+                                favoriteFoods.add(item);
+                              }
+                            });
+                          },
+
+                          // 🔥 THIS IS WHAT PEOPLE FORGET
+                          onAddToCart: () {
+                            setState(() {
+                              addToCart({
+                                'title': food['name']!,
+                                'price': food['price']!,
+                                'image': food['image']!,
+                                'subtitle': 'Subtitle',
+                              });
+                            });
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Added to cart')),
+                            );
+                          },
                         );
                       },
                     ),
