@@ -32,6 +32,8 @@ class _FavoriteScreenState extends State<FavoriteScreen>
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          elevation: 0,
+          shadowColor: Colors.transparent,
           centerTitle: true,
           title: const Text(
             'Favorite',

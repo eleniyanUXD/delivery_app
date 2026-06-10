@@ -13,6 +13,7 @@ class CustomTabBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.grey[200],
         borderRadius: BorderRadius.circular(30),
+        border: Border(bottom: BorderSide(color: Colors.transparent)),
       ),
       child: TabBar(
         controller: controller,
