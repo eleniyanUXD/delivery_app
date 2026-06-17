@@ -20,7 +20,7 @@ class EditProfileInfoCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
-        side: BorderSide(color: Colors.grey, width: 0.7),
+        side: BorderSide(color: Colors.grey, width: 0.5),
       ),
       elevation: 0,
       child: Padding(

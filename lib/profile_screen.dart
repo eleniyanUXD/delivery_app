@@ -21,7 +21,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
       body: Padding(
-        padding: EdgeInsetsGeometry.fromLTRB(16, 12, 16, 16),
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -36,18 +36,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               const SizedBox(height: 20),
 
-              // General settings
-              Text(
-                'General',
+              const Text(
+                'General Settings',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
               ),
 
-              const SizedBox(height: 12),
+              const SizedBox(height: 20),
 
               GeneralSettingsCard(
                 title: 'Notification',
                 leftIconPath: 'assets/icons/notification_icon.svg',
-                onTap: () {},
+                onTap: () => debugPrint("Notification tapped"),
               ),
 
               const SizedBox(height: 16),
@@ -88,6 +87,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 title: 'Log Out',
                 leftIconPath: 'assets/icons/log_out.svg',
                 onTap: () {},
+                isDestructive: true,
               ),
             ],
           ),

@@ -5,12 +5,14 @@ class GeneralSettingsCard extends StatelessWidget {
   final String title;
   final String leftIconPath;
   final VoidCallback onTap;
+  final bool isDestructive;
 
   const GeneralSettingsCard({
     super.key,
     required this.title,
     required this.leftIconPath,
     required this.onTap,
+    this.isDestructive = false,
   });
 
   @override
@@ -21,12 +23,16 @@ class GeneralSettingsCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey, width: 0.7),
+          border: Border.all(color: Colors.grey, width: 0.3),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(
           children: [
             SvgPicture.asset(
+              colorFilter: ColorFilter.mode(
+                isDestructive ? Colors.red : Colors.black,
+                BlendMode.srcIn,
+              ),
               leftIconPath,
               height: 22,
               width: 22,
@@ -38,7 +44,8 @@ class GeneralSettingsCard extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
+                  color: isDestructive ? Colors.red : Colors.black,
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                 ),
