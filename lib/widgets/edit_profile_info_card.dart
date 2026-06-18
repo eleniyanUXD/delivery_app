@@ -5,7 +5,8 @@ class EditProfileInfoCard extends StatelessWidget {
   final String number;
   final String email;
   final String imagePath;
-  final VoidCallback onTap;
+  final VoidCallback onEditNumber;
+  final VoidCallback onEditEmail;
 
   const EditProfileInfoCard({
     super.key,
@@ -13,7 +14,8 @@ class EditProfileInfoCard extends StatelessWidget {
     required this.number,
     required this.email,
     required this.imagePath,
-    required this.onTap,
+    required this.onEditNumber,
+    required this.onEditEmail,
   });
   @override
   Widget build(BuildContext context) {
@@ -27,66 +29,61 @@ class EditProfileInfoCard extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: Row(
           children: [
-            CircleAvatar(radius: 30, backgroundImage: AssetImage(imagePath)),
+            CircleAvatar(radius: 35, backgroundImage: AssetImage(imagePath)),
 
             const SizedBox(width: 12),
 
             // Name, phonu number & email
             Expanded(
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     name,
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 12),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
-                        child: Text(
-                          number,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color.fromARGB(206, 112, 100, 100),
-                          ),
+                      Text(
+                        number,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Color.fromARGB(206, 112, 100, 100),
                         ),
                       ),
 
-                      const SizedBox(width: 8),
-
-                      GestureDetector(
-                        onTap: onTap,
+                      InkWell(
+                        onTap: onEditNumber,
                         child: const Icon(
                           Icons.edit,
-                          size: 20,
+                          size: 18,
                           color: Colors.grey,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 12),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
-                        child: Text(
-                          email,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color.fromARGB(206, 112, 100, 100),
-                          ),
+                      Text(
+                        email,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Color.fromARGB(206, 112, 100, 100),
                         ),
                       ),
 
-                      const SizedBox(width: 8),
-
-                      GestureDetector(
-                        onTap: onTap,
+                      InkWell(
+                        onTap: onEditEmail,
                         child: const Icon(
                           Icons.edit,
-                          size: 20,
+                          size: 18,
                           color: Colors.grey,
                         ),
                       ),

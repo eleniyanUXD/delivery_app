@@ -1,6 +1,7 @@
 import 'package:delivery_app/widgets/edit_profile_info_card.dart';
 import 'package:delivery_app/widgets/general_settings_card.dart';
 import 'package:flutter/material.dart';
+import 'edit_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -10,6 +11,10 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  String name = 'Abdulrauf Fuad';
+  String number = '08054551951';
+  String email = 'Hassanfuad05@gmail.com';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,11 +32,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               EditProfileInfoCard(
-                name: 'Abdulrauf Fuad',
-                number: '08054551951',
-                email: 'Hassanfuad05@gmail.com',
+                name: name,
+                number: number,
+                email: email,
                 imagePath: 'assets/images/avatar.png',
-                onTap: () {},
+
+                onEditNumber: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => EditFieldScreen(
+                        title: "Phone Number",
+                        initialValue: number,
+                      ),
+                    ),
+                  );
+
+                  if (result != null) {
+                    setState(() => number = result);
+                  }
+                },
+
+                onEditEmail: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          EditFieldScreen(title: "Email", initialValue: email),
+                    ),
+                  );
+
+                  if (result != null) {
+                    setState(() => email = result);
+                  }
+                },
               ),
 
               const SizedBox(height: 20),
