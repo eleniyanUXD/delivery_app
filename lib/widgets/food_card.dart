@@ -1,4 +1,3 @@
-import 'package:delivery_app/cart_item.dart';
 import 'package:flutter/material.dart';
 
 class FoodCard extends StatelessWidget {
@@ -82,7 +81,7 @@ class FoodCard extends StatelessWidget {
 
                     _qtyButton(Icons.add, onAdd, size: 16),
 
-                    const SizedBox(width: 30),
+                    const Spacer(),
 
                     Text(
                       '\$${price.toStringAsFixed(2)}',

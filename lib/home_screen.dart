@@ -1,13 +1,12 @@
-import 'cart_data.dart';
-import 'cart_item.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:delivery_app/models/category_model.dart';
+import 'package:delivery_app/widgets/dish_card.dart';
 import 'package:flutter/material.dart';
-import 'cart_screen.dart';
-import 'widgets/custom_bottom_nav_bar.dart';
-import 'Chat_screen.dart';
-import 'favorite_screen.dart';
-import 'profile_screen.dart';
-import 'models/favorite_data.dart';
-import 'widgets/dish_card.dart';
+import 'widgets/custom_search_bar.dart';
+import 'models/featured_resturant_model.dart';
+import 'models/dish_model.dart';
+import 'package:delivery_app/cart_item.dart';
+import 'package:delivery_app/cart_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,620 +18,267 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final TextEditingController _searchController = TextEditingController();
-  int cartItemCount = 0;
+  final TextEditingController searchController = TextEditingController();
+
+  List<CategoryModel> categories = [];
+  List<FeaturedResturantModel> featuredRestaurant = [];
+  List<CartItem> cart = [];
+  List<DishModel> dishes = [];
+
+  void _getCategories() {
+    categories = CategoryModel.getCategories();
+  }
+
+  void _getFeaturedRestaurant() {
+    featuredRestaurant = FeaturedResturantModel.getFeaturedRestaurant();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getCategories();
+    _getFeaturedRestaurant();
+    dishes = DishModel.getDishes();
+  }
 
   @override
   void dispose() {
-    _searchController.dispose();
+    searchController.dispose();
     super.dispose();
   }
 
-  void addToCart(Map<String, dynamic> item) {
-    print("ADDING ITEM IMAGE: ${item['image']}");
-    final index = cartItems.indexWhere(
-      (cartItem) => cartItem.title == item['title'],
-    );
-
-    if (index != -1) {
-      cartItems[index].quantity++;
-    } else {
-      final priceValue = item['price'] is String
-          ? double.tryParse(
-                  item['price'].toString().replaceAll(RegExp(r'[^0-9.]'), ''),
-                ) ??
-                0.0
-          : (item['price'] is num ? item['price'].toDouble() : 0.0);
-
-      cartItems.add(
-        CartItem(
-          id: item['title'].toString().hashCode,
-          title: item['title'].toString(),
-          subtitle: item['subtitle']?.toString() ?? '',
-          image: item['image']?.toString() ?? '',
-          price: priceValue,
-          quantity: 1,
-        ),
-      );
-    }
-  }
-
-  void incrementCartItemCount() {
-    setState(() {
-      cartItemCount++;
-    });
-  }
-
-  void decrementCartItemCount() {
-    setState(() {
-      if (cartItemCount > 0) {
-        cartItemCount--;
-      }
-    });
-  }
-
-  final List<Map<String, String>> _categories = [
-    {'name': 'Shawarma', 'image': 'assets/images/shawarma.png'},
-    {'name': 'Pizza', 'image': 'assets/images/pizza.png'},
-    {'name': 'Jollof Rice', 'image': 'assets/images/jollof rice.png'},
-    {'name': 'Drinks', 'image': 'assets/images/drinks.png'},
-    {'name': 'White Rice', 'image': 'assets/images/white rice.png'},
-    {'name': 'Spaghetti', 'image': 'assets/images/spaghetti.png'},
-  ];
-
-  final List<Map<String, String>> _featuredRestaurants = [
-    {'name': 'Terra', 'image': 'assets/images/terra.png'},
-    {'name': 'McDonald', 'image': 'assets/images/McDonald.png'},
-    {'name': 'KFC', 'image': 'assets/images/KFC.png'},
-    {'name': 'Chillox', 'image': 'assets/images/chillox.png'},
-    {'name': 'Yakoyo', 'image': 'assets/images/yakoyo.png'},
-    {'name': 'Chicken Republic', 'image': 'assets/images/chicken.png'},
-  ];
-
-  final List<Map<String, String>> _popularFood = [
-    {
-      'name': 'Shawarma',
-      'image': 'assets/images/shawarma.png',
-      'price': '\$7.00',
-    },
-    {'name': 'Pizza', 'image': 'assets/images/pizza.png', 'price': '\$12.00'},
-    {
-      'name': 'Hamburger',
-      'image': 'assets/images/hamburger.png',
-      'price': '\$12.00',
-    },
-    {
-      'name': 'Vegetable',
-      'image': 'assets/images/vegetable.png',
-      'price': '\$6.00',
-    },
-    {
-      'name': 'Seafood Okro',
-      'image': 'assets/images/seafoodokro.png',
-      'price': '\$4.00',
-    },
-    {
-      'name': 'Chicken',
-      'image': 'assets/images/chickenn.png',
-      'price': '\$12.00',
-    },
-    {'name': 'Pasta', 'image': 'assets/images/pasta.png', 'price': '\$8.00'},
-    {
-      'name': 'Chicken Salad',
-      'image': 'assets/images/chickensalad.png',
-      'price': '\$13.00',
-    },
-    {'name': 'Moi-Moi', 'image': 'assets/images/moimoi.png', 'price': '\$2.00'},
-    {
-      'name': 'Spicy Noodles',
-      'image': 'assets/images/spicynoodles.png',
-      'price': '\$7.00',
-    },
-    {
-      'name': 'Beef Salad',
-      'image': 'assets/images/beefsalad.png',
-      'price': '\$8.00',
-    },
-    {
-      'name': 'Egg Pizza',
-      'image': 'assets/images/eggpizza.png',
-      'price': '\$5.00',
-    },
-    {
-      'name': 'Pepper Soup',
-      'image': 'assets/images/peppersoup.png',
-      'price': '\$11.00',
-    },
-    {
-      'name': 'Jollof Rice',
-      'image': 'assets/images/jollofrice.png',
-      'price': '\$9.00',
-    },
-  ];
-
-  Widget dishCard({
-    required int index,
-    required String name,
-    required String image,
-    required String price,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade300),
-      ),
-      child: Stack(
-        children: [
-          Column(
-            children: [
-              const SizedBox(height: 12),
-              CircleAvatar(radius: 40, backgroundImage: AssetImage(image)),
-              const SizedBox(height: 12),
-
-              // Dish name
-              Text(
-                name,
-                style: const TextStyle(fontSize: 16, color: Colors.black),
-              ),
-              const SizedBox(height: 8),
-
-              // Price
-              Text(
-                price,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black,
-                ),
-              ),
-              const SizedBox(height: 12),
-
-              // Add to cart button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      addToCart({
-                        'title': name,
-                        'price': price,
-                        'image': image,
-                        'subtitle': 'Subtitle',
-                      });
-                    });
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Added to cart')),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                  ),
-                  child: const Text(
-                    "Add to Cart",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          // Fvaorite icon
-          Positioned(
-            top: 0,
-            right: 0,
-            child: IconButton(
-              onPressed: () {
-                setState(() {
-                  final item = {'name': name, 'image': image, 'price': price};
-
-                  final exists = favoriteFoods.any(
-                    (food) => food['name'] == name,
-                  );
-
-                  if (exists) {
-                    favoriteFoods.removeWhere((food) => food['name'] == name);
-                  } else {
-                    favoriteFoods.add(item);
-                  }
-                });
-              },
-              icon: Icon(
-                favoriteFoods.any((food) => food['name'] == name)
-                    ? Icons.favorite
-                    : Icons.favorite_border,
-                color: favoriteFoods.any((food) => food['name'] == name)
-                    ? Colors.red
-                    : Colors.grey,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  int currentIndex = 0;
-
-  final List<Widget> screens = [
-    const HomeScreen(), // your main home UI
-    const ChatScreen(),
-    const FavoriteScreen(),
-    const ProfileScreen(),
-  ];
-
-  String query = '';
-
   @override
   Widget build(BuildContext context) {
-    final filteredCategories = _categories.where((c) {
-      return c['name']!.toLowerCase().contains(query.toLowerCase());
-    }).toList();
-
-    final filteredRestaurants = _featuredRestaurants.where((r) {
-      return r['name']!.toLowerCase().contains(query.toLowerCase());
-    }).toList();
-
-    return Scaffold(
-      body: currentIndex == 0
-          ? SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 50, 16, 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 50, 16, 20),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Image.asset(
+                    'assets/images/avatar.png',
+                    width: 60,
+                    height: 60,
+                    fit: BoxFit.cover,
+                    filterQuality: FilterQuality.low, // 👈 improves performance
+                  ),
+                ),
+                SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    /// HEADER
-                    Row(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.asset(
-                            'assets/images/avatar.png',
-                            width: 60,
-                            height: 60,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-
-                        const SizedBox(width: 10),
-
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              "Welcome Back",
-                              style: TextStyle(fontSize: 20),
-                            ),
-                            Text(
-                              "Fuad",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const Spacer(),
-
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.notifications,
-                            color: Colors.green,
-                            size: 28,
-                          ),
-                        ),
-                      ],
+                    Text(
+                      'Welcome back',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
+                    SizedBox(height: 3),
+                    Text('Eleniyan', style: TextStyle(fontSize: 16)),
+                  ],
+                ),
+                Spacer(),
+                Container(
+                  width: 40,
+                  height: 40,
+                  padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade200,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(Icons.notifications),
+                ),
+              ],
+            ),
 
-                    const SizedBox(height: 16),
+            SizedBox(height: 20),
 
-                    /// SEARCH BAR
-                    Row(
+            // Search bar
+            CustomSearchBar(
+              controller: searchController,
+              hintText: 'Search food restaurants',
+              cart: cart, // ✅ PASS CART HERE
+            ),
+            SizedBox(height: 16),
+
+            // Banner
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Image.asset(
+                'assets/images/banner.png',
+                width: double.infinity,
+                height: 150,
+                fit: BoxFit.fitWidth, // 👈 better for banners
+                filterQuality: FilterQuality.low, // 👈 performance boost
+              ),
+            ),
+
+            SizedBox(height: 16),
+
+            // Category
+            Text(
+              'Categories',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+            ),
+            SizedBox(height: 12),
+            Container(
+              height: 100,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.only(left: 16, right: 16),
+                separatorBuilder: (context, index) => SizedBox(width: 20),
+                itemCount: categories.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    width: 100,
+                    decoration: BoxDecoration(
+                      color: categories[index].boxColor.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(
-                          child: TextField(
-                            controller: _searchController,
-                            onChanged: (value) {
-                              setState(() {
-                                query = value;
-                              });
-                            },
-                            decoration: InputDecoration(
-                              hintText: "Search for food or restaurant",
-                              prefixIcon: const Icon(Icons.search),
-                              isDense: true,
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(40),
-                                borderSide: BorderSide(
-                                  color: Colors.grey,
-                                  width: 0.5,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(40),
-                                borderSide: BorderSide(
-                                  color: Colors.green,
-                                  width: 0.5,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        const SizedBox(width: 20),
-
-                        // Add to cart icon
                         Container(
                           height: 40,
                           width: 40,
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.grey, width: 0.5),
+                            shape: BoxShape.circle,
                           ),
-                          child: IconButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (_) => CartScreen()),
-                              );
-                            },
-                            icon: Icon(
-                              Icons.shopping_cart,
-                              color: Colors.green,
-                            ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Image.asset(categories[index].imagePath),
                           ),
                         ),
-                      ],
-                    ),
 
-                    const SizedBox(height: 20),
-
-                    /// BANNER
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.asset(
-                        "assets/images/banner.png",
-                        height: 134,
-                        width: MediaQuery.of(context).size.width,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    /// FEATURED RESTAURANTS
-                    Row(
-                      children: [
-                        const Text(
-                          "Featured Restaurants",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const Spacer(),
-                        TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            "See all",
-                            style: TextStyle(color: Colors.green),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 10),
-
-                    SizedBox(
-                      height: 140,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: filteredRestaurants.length,
-                        itemBuilder: (context, index) {
-                          final restaurant = filteredRestaurants[index];
-
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 12),
-                            child: Container(
-                              width: 100,
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(14),
-                                border: Border.all(color: Colors.grey.shade300),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  /// BOX IMAGE (NOT CIRCLE)
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.asset(
-                                      restaurant['image']!,
-                                      width: 56,
-                                      height: 56,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-
-                                  const SizedBox(height: 10),
-
-                                  Text(
-                                    restaurant['name']!,
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(fontSize: 12),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    /// CATEGORIES HEADER
-                    Row(
-                      children: [
-                        const Text(
-                          "Categories",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const Spacer(),
-                        TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            "See all",
-                            style: TextStyle(color: Colors.green),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 10),
-
-                    /// CATEGORIES LIST
-                    SizedBox(
-                      height: 100,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: filteredCategories.length,
-                        itemBuilder: (context, index) {
-                          final category = filteredCategories[index];
-
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 12),
-                            child: Container(
-                              width: 80,
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(color: Colors.grey.shade300),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  /// BOX IMAGE
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Image.asset(
-                                      category['image']!,
-                                      width: 40,
-                                      height: 40,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-
-                                  const SizedBox(height: 6),
-
-                                  Text(
-                                    category['name']!,
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(fontSize: 12),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 16),
-                    Row(
-                      children: [
+                        SizedBox(height: 4),
                         Text(
-                          'Popular Food',
+                          categories[index].name,
                           style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black,
+                            fontSize: 14,
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 12),
-
-                    //Dish cards
-                    GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: _popularFood.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 24,
-                            mainAxisSpacing: 16,
-                            childAspectRatio: 0.65,
-                          ),
-                      itemBuilder: (context, index) {
-                        final food = _popularFood[index];
-                        return DishCard(
-                          name: food['name']!,
-                          image: food['image']!,
-                          price: food['price']!,
-                          isFavorite: favoriteFoods.any(
-                            (f) => f['name'] == food['name'],
-                          ),
-
-                          onFavoriteToggle: () {
-                            setState(() {
-                              final item = {
-                                'name': food['name']!,
-                                'image': food['image']!,
-                                'price': food['price']!,
-                              };
-
-                              final exists = favoriteFoods.any(
-                                (f) => f['name'] == food['name'],
-                              );
-
-                              if (exists) {
-                                favoriteFoods.removeWhere(
-                                  (f) => f['name'] == food['name'],
-                                );
-                              } else {
-                                favoriteFoods.add(item);
-                              }
-                            });
-                          },
-
-                          // 🔥 THIS IS WHAT PEOPLE FORGET
-                          onAddToCart: () {
-                            setState(() {
-                              addToCart({
-                                'title': food['name']!,
-                                'price': food['price']!,
-                                'image': food['image']!,
-                                'subtitle': 'Subtitle',
-                              });
-                            });
-
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Added to cart')),
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                ),
+                  );
+                },
               ),
-            )
-          : screens[currentIndex],
+            ),
 
-      //Bottom nav bar
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: currentIndex,
-        onTap: (index) {
-          setState(() {
-            currentIndex = index;
-          });
-        },
+            SizedBox(height: 16),
+
+            // Featured restaurant
+            Text(
+              'Featured restaurant',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+            ),
+
+            SizedBox(height: 12),
+            Container(
+              height: 120,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.only(left: 16, right: 16),
+                separatorBuilder: (context, index) => (SizedBox(width: 12)),
+                itemCount: featuredRestaurant.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    width: 100,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey, width: 0.5),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 50,
+                          width: 50,
+                          decoration: BoxDecoration(shape: BoxShape.circle),
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Image.asset(
+                              featuredRestaurant[index].imagePath,
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(height: 4),
+                        Text(
+                          featuredRestaurant[index].name,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+            SizedBox(height: 16),
+
+            // Popular food
+            Text(
+              'Popular food',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+            ),
+            SizedBox(height: 12),
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: dishes.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                childAspectRatio: 0.75,
+              ),
+              itemBuilder: (context, index) {
+                final dish = dishes[index];
+
+                return DishCard(
+                  name: dish.name,
+                  image: dish.imagePath,
+                  price: dish.price.toString(),
+                  isFavorite: dish.isFavorite,
+                  onFavoriteToggle: () {
+                    setState(() {
+                      dish.isFavorite = !dish.isFavorite;
+                    });
+                  },
+                  onAddToCart: () {
+                    setState(() {
+                      cart.add(
+                        CartItem(
+                          id: index,
+                          title: dish.name,
+                          subtitle: 'Delicious food',
+                          price: dish.price.toDouble(),
+                          image: dish.imagePath,
+                          quantity: 1,
+                        ),
+                      ); // ADD TO CART
+                    });
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('${dish.name} added to cart!')),
+                    );
+                  },
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

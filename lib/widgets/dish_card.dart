@@ -6,7 +6,7 @@ class DishCard extends StatelessWidget {
   final String price;
   final bool isFavorite;
   final VoidCallback onFavoriteToggle;
-  final VoidCallback onAddToCart; // 👈 NEW
+  final VoidCallback onAddToCart; 
 
   const DishCard({
     super.key,
@@ -15,7 +15,7 @@ class DishCard extends StatelessWidget {
     required this.price,
     required this.isFavorite,
     required this.onFavoriteToggle,
-    required this.onAddToCart, // 👈
+    required this.onAddToCart, 
   });
 
   @override
@@ -29,54 +29,60 @@ class DishCard extends StatelessWidget {
       child: Stack(
         children: [
           Column(
+            mainAxisSize: MainAxisSize.min, 
             children: [
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
 
-              CircleAvatar(radius: 40, backgroundImage: AssetImage(image)),
-
-              const SizedBox(height: 12),
-
-              Text(
-                name,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.grey[600],
-                ),
+              CircleAvatar(
+                radius: 35, 
+                backgroundImage: AssetImage(image),
               ),
 
               const SizedBox(height: 8),
 
               Text(
-                price,
+                name,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.grey[600],
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+
+              const SizedBox(height: 6),
+
+              Text(
+                '₦$price',
                 style: const TextStyle(
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
 
-              const SizedBox(height: 12),
+              const Spacer(), 
 
-              //  ADD TO CART BUTTON (BACK)
               SizedBox(
+                height: 36, 
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: onAddToCart,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
+                    padding: EdgeInsets.zero, 
                   ),
                   child: const Text(
                     "Add to Cart",
                     style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w800,
                       color: Colors.white,
-                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
               ),
             ],
           ),
-
           // ❤️ Favorite icon
           Positioned(
             top: 0,

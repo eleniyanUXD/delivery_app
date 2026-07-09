@@ -20,6 +20,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   int selectedPaymentIndex = 0;
 
+  @override
   void initState() {
     super.initState();
   }
@@ -41,6 +42,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     return total;
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

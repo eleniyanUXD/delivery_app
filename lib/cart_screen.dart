@@ -1,17 +1,16 @@
 import 'package:delivery_app/cart_item.dart';
 import 'package:flutter/material.dart';
 import 'package:delivery_app/widgets/food_card.dart';
-import 'cart_data.dart';
 import 'widgets/cart_summary.dart';
 import 'checkout_screen.dart';
 
 class CartScreen extends StatefulWidget {
-  const CartScreen({super.key});
+  final List<CartItem> cart;
+
+  const CartScreen({super.key, required this.cart});
 
   @override
-  State<CartScreen> createState() {
-    return _CartScreenState();
-  }
+  State<CartScreen> createState() => _CartScreenState();
 }
 
 class _CartScreenState extends State<CartScreen> {
@@ -31,7 +30,7 @@ class _CartScreenState extends State<CartScreen> {
 
   double getTotalPrice() {
     double total = 0.0;
-    for (var item in cartItems) {
+    for (var item in widget.cart) {
       total += (item.price as num) * (item.quantity as num);
     }
     return total;
@@ -49,7 +48,7 @@ class _CartScreenState extends State<CartScreen> {
       ),
 
       // Body
-      body: cartItems.isEmpty
+      body: widget.cart.isEmpty
           ? const Center(
               child: Text(
                 "Your cart is empty 🛒",
@@ -60,9 +59,9 @@ class _CartScreenState extends State<CartScreen> {
               children: [
                 Expanded(
                   child: ListView.builder(
-                    itemCount: cartItems.length,
+                    itemCount: widget.cart.length,
                     itemBuilder: (context, index) {
-                      final CartItem cartItem = cartItems[index];
+                      final CartItem cartItem = widget.cart[index];
 
                       return FoodCard(
                         key: ValueKey(cartItem.id),
@@ -88,7 +87,7 @@ class _CartScreenState extends State<CartScreen> {
 
                         onDelete: () {
                           setState(() {
-                            cartItems.removeAt(index);
+                            widget.cart.removeAt(index);
                           });
                         },
                       );

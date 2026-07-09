@@ -49,7 +49,7 @@ class _FavoriteScreenState extends State<FavoriteScreen>
         body: TabBarView(
           controller: _controller,
           children: [
-            favoriteFoods.isEmpty
+            FavoriteData.items.isEmpty
                 ? const Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -69,7 +69,7 @@ class _FavoriteScreenState extends State<FavoriteScreen>
                   )
                 : GridView.builder(
                     padding: const EdgeInsets.all(12),
-                    itemCount: favoriteFoods.length,
+                    itemCount: FavoriteData.items.length,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
@@ -78,7 +78,7 @@ class _FavoriteScreenState extends State<FavoriteScreen>
                           childAspectRatio: 0.65,
                         ),
                     itemBuilder: (context, index) {
-                      final food = favoriteFoods[index];
+                      final food = FavoriteData.items[index];
 
                       return DishCard(
                         name: food['name']!,
@@ -89,7 +89,7 @@ class _FavoriteScreenState extends State<FavoriteScreen>
 
                         onFavoriteToggle: () {
                           setState(() {
-                            favoriteFoods.removeAt(index);
+                            FavoriteData.items.removeAt(index);
                           });
                         },
 

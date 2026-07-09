@@ -241,7 +241,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                           ],
                         ),
                       );
-                    }).toList(),
+                    }),
                   ],
                 ),
               ),

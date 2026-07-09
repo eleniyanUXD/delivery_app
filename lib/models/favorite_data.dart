@@ -1,1 +1,3 @@
-List<Map<String, String>> favoriteFoods = [];
+class FavoriteData {
+  static List<Map<String, String>> items = [];
+}
