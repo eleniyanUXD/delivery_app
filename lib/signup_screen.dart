@@ -1,6 +1,10 @@
+import 'package:delivery_app/home_screen.dart';
+import 'package:delivery_app/main_navigation_screen.dart';
+import 'package:delivery_app/signin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'social_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -12,6 +16,67 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
+  bool isLoading = false;
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  void handleSignUp() async {
+    if (passwordController.text.trim() !=
+        confirmPasswordController.text.trim()) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Passwords do not match')));
+      return;
+    }
+
+    setState(() => isLoading = true);
+
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Signup successful')));
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => MainNavigationScreen()),
+      );
+    } on FirebaseAuthException catch (e) {
+      String message = "Signup failed";
+
+      if (e.code == 'email-already-in-use') {
+        message = "Email already in use";
+      } else if (e.code == 'weak-password') {
+        message = "Password is too weak";
+      } else if (e.code == 'invalid-email') {
+        message = "Invalid email address";
+      }
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error: $e")));
+    } finally {
+      setState(() => isLoading = false); 
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +125,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
               // Email field
               TextField(
+                controller: emailController,
                 decoration: InputDecoration(
                   labelText: 'Email address',
                   contentPadding: const EdgeInsets.symmetric(
@@ -75,6 +141,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
               // Password field
               TextField(
+                controller: passwordController,
                 obscureText: _obscurePassword,
                 decoration: InputDecoration(
                   labelText: 'Password',
@@ -103,6 +170,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
               // Confirm password field
               TextField(
+                controller: confirmPasswordController,
                 obscureText: _obscureConfirmPassword,
                 decoration: InputDecoration(
                   labelText: 'Confirm password',
@@ -131,7 +199,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
               // Sign Up button
               ElevatedButton(
-                onPressed: () {},
+                onPressed: isLoading ? null : handleSignUp,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                   foregroundColor: Colors.white,
@@ -147,7 +215,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                child: const Text('Sign Up'),
+                child: isLoading
+                    ? const CircularProgressIndicator(color: Colors.white)
+                    : const Text('Sign Up'),
               ),
               const SizedBox(height: 14),
 
@@ -185,7 +255,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     onPressed: () {},
                     iconSize: 24,
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 12),
                   socialButton(
                     icon: SvgPicture.asset(
                       'assets/images/google.svg',
@@ -207,7 +277,12 @@ class _SignupScreenState extends State<SignupScreen> {
                 children: [
                   const Text('Already have an account?'),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => SigninScreen()),
+                      );
+                    },
                     child: const Text(
                       'Sign in',
                       style: TextStyle(color: Colors.green, fontSize: 14),

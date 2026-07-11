@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'social_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'main_navigation_screen.dart';
+import 'signup_screen.dart';
 
 class SigninScreen extends StatefulWidget {
   const SigninScreen({super.key});
@@ -12,6 +15,46 @@ class SigninScreen extends StatefulWidget {
 class _SigninScreenState extends State<SigninScreen> {
   bool _obscurePassword = true;
   bool _rememberMe = false;
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  bool isLoading = false;
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  void handleSignIn() async {
+    setState(() => isLoading = true);
+
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Login successful')));
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => MainNavigationScreen()),
+      );
+    } on FirebaseAuthException catch (e) {
+      print('LOGIN CODE: ${e.code}');
+      print('LOGIN MESSAGE: ${e.message}');
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.code)));
+    } finally {
+      setState(() => isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +91,7 @@ class _SigninScreenState extends State<SigninScreen> {
 
               // Email field
               TextField(
+                controller: emailController,
                 decoration: InputDecoration(
                   labelText: 'Email',
                   contentPadding: const EdgeInsets.symmetric(
@@ -63,14 +107,15 @@ class _SigninScreenState extends State<SigninScreen> {
 
               // Password field
               TextField(
+                controller: passwordController,
                 obscureText: _obscurePassword,
                 decoration: InputDecoration(
                   labelText: 'Password',
                   suffixIcon: IconButton(
                     icon: Icon(
                       _obscurePassword
-                          ? Icons.visibility
-                          : Icons.visibility_off,
+                          ? Icons.visibility_off
+                          : Icons.visibility,
                     ),
                     onPressed: () {
                       setState(() {
@@ -128,9 +173,9 @@ class _SigninScreenState extends State<SigninScreen> {
 
               // Sign in button
               ElevatedButton(
-                onPressed: () {},
+                onPressed: isLoading ? null : handleSignIn,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(178, 43, 211, 49),
+                  backgroundColor: Colors.green,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(
                     vertical: 12,
@@ -144,7 +189,16 @@ class _SigninScreenState extends State<SigninScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                child: const Text('Sign In'),
+                child: isLoading
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Text('Sign In'),
               ),
               SizedBox(height: 14),
 
@@ -182,7 +236,7 @@ class _SigninScreenState extends State<SigninScreen> {
                     onPressed: () {},
                     iconSize: 24,
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 12),
                   socialButton(
                     icon: SvgPicture.asset(
                       'assets/images/google.svg',
@@ -202,14 +256,20 @@ class _SigninScreenState extends State<SigninScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text('Already have an account?'),
+                  const Text('Don\'t have an account?'),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => SignupScreen()),
+                      );
+                    },
                     child: const Text(
                       'Sign up',
                       style: TextStyle(
-                        color: Color.fromARGB(178, 43, 211, 49),
+                        color: Colors.green,
                         fontSize: 14,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),

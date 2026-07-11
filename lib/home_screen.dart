@@ -1,20 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:delivery_app/models/category_model.dart';
-import 'package:delivery_app/widgets/dish_card.dart';
 import 'package:flutter/material.dart';
-import 'widgets/custom_search_bar.dart';
-import 'models/featured_resturant_model.dart';
-import 'models/dish_model.dart';
+import 'package:delivery_app/widgets/dish_card.dart';
+import 'package:delivery_app/widgets/custom_search_bar.dart';
+import 'package:delivery_app/models/category_model.dart';
+import 'package:delivery_app/models/featured_resturant_model.dart';
+import 'package:delivery_app/models/dish_model.dart';
 import 'package:delivery_app/cart_item.dart';
-import 'package:delivery_app/cart_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() {
-    return _HomeScreenState();
-  }
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -25,19 +21,11 @@ class _HomeScreenState extends State<HomeScreen> {
   List<CartItem> cart = [];
   List<DishModel> dishes = [];
 
-  void _getCategories() {
-    categories = CategoryModel.getCategories();
-  }
-
-  void _getFeaturedRestaurant() {
-    featuredRestaurant = FeaturedResturantModel.getFeaturedRestaurant();
-  }
-
   @override
   void initState() {
     super.initState();
-    _getCategories();
-    _getFeaturedRestaurant();
+    categories = CategoryModel.getCategories();
+    featuredRestaurant = FeaturedResturantModel.getFeaturedRestaurant();
     dishes = DishModel.getDishes();
   }
 
@@ -49,95 +37,113 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 50, 16, 20),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(30),
-                  child: Image.asset(
-                    'assets/images/avatar.png',
-                    width: 60,
-                    height: 60,
-                    fit: BoxFit.cover,
-                    filterQuality: FilterQuality.low, // 👈 improves performance
-                  ),
-                ),
-                SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Welcome back',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          // 🔹 HEADER
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 50, 16, 20),
+              child: Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(30),
+                    child: Image.asset(
+                      'assets/images/avatar.png',
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.cover,
+                      cacheWidth: 120,
                     ),
-                    SizedBox(height: 3),
-                    Text('Eleniyan', style: TextStyle(fontSize: 16)),
-                  ],
-                ),
-                Spacer(),
-                Container(
-                  width: 40,
-                  height: 40,
-                  padding: EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
-                    shape: BoxShape.circle,
                   ),
-                  child: Icon(Icons.notifications),
-                ),
-              ],
-            ),
-
-            SizedBox(height: 20),
-
-            // Search bar
-            CustomSearchBar(
-              controller: searchController,
-              hintText: 'Search food restaurants',
-              cart: cart, // ✅ PASS CART HERE
-            ),
-            SizedBox(height: 16),
-
-            // Banner
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Image.asset(
-                'assets/images/banner.png',
-                width: double.infinity,
-                height: 150,
-                fit: BoxFit.fitWidth, // 👈 better for banners
-                filterQuality: FilterQuality.low, // 👈 performance boost
+                  const SizedBox(width: 12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        'Welcome back',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(height: 3),
+                      Text('Eleniyan', style: TextStyle(fontSize: 16)),
+                    ],
+                  ),
+                  const Spacer(),
+                  Container(
+                    width: 40,
+                    height: 40,
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.notifications),
+                  ),
+                ],
               ),
             ),
+          ),
 
-            SizedBox(height: 16),
-
-            // Category
-            Text(
-              'Categories',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+          // 🔹 SEARCH BAR
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: CustomSearchBar(
+                controller: searchController,
+                hintText: 'Search food restaurants',
+                cart: cart,
+              ),
             ),
-            SizedBox(height: 12),
-            Container(
+          ),
+
+          // 🔹 BANNER
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.asset(
+                  'assets/images/banner.png',
+                  height: 150,
+                  fit: BoxFit.contain,
+                  cacheWidth: 600,
+                ),
+              ),
+            ),
+          ),
+
+          // 🔹 CATEGORIES TITLE
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                'Categories',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+              ),
+            ),
+          ),
+
+          const SliverToBoxAdapter(child: SizedBox(height: 12)),
+
+          // 🔹 CATEGORIES LIST
+          SliverToBoxAdapter(
+            child: SizedBox(
               height: 100,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.only(left: 16, right: 16),
-                separatorBuilder: (context, index) => SizedBox(width: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 itemCount: categories.length,
+                separatorBuilder: (_, __) => const SizedBox(width: 20),
                 itemBuilder: (context, index) {
+                  final category = categories[index];
+
                   return Container(
                     width: 100,
                     decoration: BoxDecoration(
-                      color: categories[index].boxColor.withOpacity(0.3),
+                      color: category.boxColor.withOpacity(0.3),
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Column(
@@ -146,24 +152,22 @@ class _HomeScreenState extends State<HomeScreen> {
                         Container(
                           height: 40,
                           width: 40,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: Colors.white,
                             shape: BoxShape.circle,
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(4.0),
-                            child: Image.asset(categories[index].imagePath),
+                            child: Image.asset(
+                              category.imagePath,
+                              cacheWidth: 80,
+                            ),
                           ),
                         ),
-
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text(
-                          categories[index].name,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                            fontSize: 14,
-                          ),
+                          category.name,
+                          style: const TextStyle(fontSize: 14),
                         ),
                       ],
                     ),
@@ -171,24 +175,35 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             ),
+          ),
 
-            SizedBox(height: 16),
+          const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
-            // Featured restaurant
-            Text(
-              'Featured restaurant',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+          // 🔹 FEATURED TITLE
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                'Featured restaurant',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+              ),
             ),
+          ),
 
-            SizedBox(height: 12),
-            Container(
+          const SliverToBoxAdapter(child: SizedBox(height: 12)),
+
+          // 🔹 FEATURED LIST
+          SliverToBoxAdapter(
+            child: SizedBox(
               height: 120,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.only(left: 16, right: 16),
-                separatorBuilder: (context, index) => (SizedBox(width: 12)),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 itemCount: featuredRestaurant.length,
+                separatorBuilder: (_, __) => const SizedBox(width: 12),
                 itemBuilder: (context, index) {
+                  final restaurant = featuredRestaurant[index];
+
                   return Container(
                     width: 100,
                     decoration: BoxDecoration(
@@ -198,26 +213,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
+                        SizedBox(
                           height: 50,
                           width: 50,
-                          decoration: BoxDecoration(shape: BoxShape.circle),
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Image.asset(
-                              featuredRestaurant[index].imagePath,
-                            ),
+                          child: Image.asset(
+                            restaurant.imagePath,
+                            cacheWidth: 100,
                           ),
                         ),
-
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text(
-                          featuredRestaurant[index].name,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                            fontSize: 14,
-                          ),
+                          restaurant.name,
+                          style: const TextStyle(fontSize: 14),
                         ),
                       ],
                     ),
@@ -225,25 +232,28 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             ),
-            SizedBox(height: 16),
+          ),
 
-            // Popular food
-            Text(
-              'Popular food',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-            ),
-            SizedBox(height: 12),
-            GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: dishes.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 0.75,
+          const SliverToBoxAdapter(child: SizedBox(height: 16)),
+
+          // 🔹 POPULAR TITLE
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                'Popular food',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
               ),
-              itemBuilder: (context, index) {
+            ),
+          ),
+
+          const SliverToBoxAdapter(child: SizedBox(height: 12)),
+
+          // 🔥 GRID (MAIN FIX)
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverGrid(
+              delegate: SliverChildBuilderDelegate((context, index) {
                 final dish = dishes[index];
 
                 return DishCard(
@@ -267,7 +277,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           image: dish.imagePath,
                           quantity: 1,
                         ),
-                      ); // ADD TO CART
+                      );
                     });
 
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -275,10 +285,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   },
                 );
-              },
+              }, childCount: dishes.length),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                childAspectRatio: 0.75,
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -57,7 +57,6 @@ class DefaultFirebaseOptions {
     projectId: 'delivery-app-48820',
     storageBucket: 'delivery-app-48820.firebasestorage.app',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBPnogjRvPdFuwJLA7BRgkexDLqXIRU_lA',
     appId: '1:590373414259:ios:2886ef8b038948c0951106',
@@ -66,7 +65,6 @@ class DefaultFirebaseOptions {
     storageBucket: 'delivery-app-48820.firebasestorage.app',
     iosBundleId: 'com.example.deliveryApp',
   );
-
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyBPnogjRvPdFuwJLA7BRgkexDLqXIRU_lA',
     appId: '1:590373414259:ios:2886ef8b038948c0951106',
