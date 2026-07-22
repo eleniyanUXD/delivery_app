@@ -1,5 +1,6 @@
 import 'package:delivery_app/home_screen.dart';
 import 'package:delivery_app/main_navigation_screen.dart';
+import 'package:delivery_app/phone_verification.dart';
 import 'package:delivery_app/signin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -53,7 +54,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => MainNavigationScreen()),
+        MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
       );
     } on FirebaseAuthException catch (e) {
       String message = "Signup failed";

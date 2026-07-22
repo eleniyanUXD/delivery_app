@@ -2,6 +2,7 @@ import 'package:delivery_app/widgets/edit_profile_info_card.dart';
 import 'package:delivery_app/widgets/general_settings_card.dart';
 import 'package:flutter/material.dart';
 import 'edit_screen.dart';
+import 'package:delivery_app/services/auth_service.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -120,7 +121,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               GeneralSettingsCard(
                 title: 'Log Out',
                 leftIconPath: 'assets/icons/log_out.svg',
-                onTap: () {},
+                onTap: () => AuthService.logout(context),
                 isDestructive: true,
               ),
             ],

@@ -1,9 +1,11 @@
+import 'package:delivery_app/home_screen.dart';
+import 'package:delivery_app/main_navigation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'social_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'main_navigation_screen.dart';
 import 'signup_screen.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class SigninScreen extends StatefulWidget {
   const SigninScreen({super.key});
@@ -27,6 +29,40 @@ class _SigninScreenState extends State<SigninScreen> {
     super.dispose();
   }
 
+  Future<void> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      if (googleUser == null) {
+        print("User cancelled");
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final userCredential = await FirebaseAuth.instance.signInWithCredential(
+        credential,
+      );
+
+      if (userCredential.user != null) {
+        print("SUCCESS ✅");
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => MainNavigationScreen()),
+        );
+      }
+    } catch (e) {
+      print("ERROR ❌: $e");
+    }
+  }
+
   void handleSignIn() async {
     setState(() => isLoading = true);
 
@@ -42,7 +78,7 @@ class _SigninScreenState extends State<SigninScreen> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => MainNavigationScreen()),
+        MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
       );
     } on FirebaseAuthException catch (e) {
       print('LOGIN CODE: ${e.code}');
@@ -245,7 +281,10 @@ class _SigninScreenState extends State<SigninScreen> {
                     ),
                     text: 'Sign in with Google',
                     color: Colors.red,
-                    onPressed: () {},
+                    onPressed: () async {
+                      print("BUTTON CLICKED 🔥");
+                      await signInWithGoogle();
+                    },
                     iconSize: 24,
                   ),
                 ],

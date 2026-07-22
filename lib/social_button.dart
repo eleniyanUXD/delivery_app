@@ -11,7 +11,7 @@ Widget socialButton({
     width: 216,
     height: 44,
     child: OutlinedButton.icon(
-      onPressed: () {},
+      onPressed: onPressed,
       icon: icon,
       label: Text(
         text,
