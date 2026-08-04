@@ -1,6 +1,8 @@
+import 'package:delivery_app/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'models/onboarding_model.dart';
 import 'widgets/onboarding_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -74,10 +76,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                onPressed: () {
+                onPressed: () async {
+                  print("BUTTON CLICKED");
+
                   if (_currentPage == onboardingData.length - 1) {
-                    // Navigate to next screen
+                    print("LAST PAGE");
+
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.setBool('seenOnboarding', true);
+
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SignupScreen(),
+                      ),
+                    );
                   } else {
+                    print("NOT LAST PAGE");
+
                     _pageController.nextPage(
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.ease,

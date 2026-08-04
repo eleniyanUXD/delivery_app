@@ -1,29 +1,56 @@
+import 'package:delivery_app/signin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:delivery_app/onboarding_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class SplashSceen extends StatefulWidget {
-  const SplashSceen({super.key});
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
   @override
-  State<SplashSceen> createState() {
+  State<SplashScreen> createState() {
     return _SplashScreenState();
   }
 }
 
-class _SplashScreenState extends State<SplashSceen> {
+class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    checkFirstTimeUser();
 
     Future.delayed(const Duration(seconds: 10), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) {
-            return OnboardingScreen1();
+            return OnboardingScreen();
           },
         ),
       );
     });
+  }
+
+  void checkFirstTimeUser() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    bool seenOnboarding = prefs.getBool('seenOnboarding') ?? false;
+
+    await Future.delayed(const Duration(seconds: 2));
+
+    if (!mounted) return;
+
+    if (seenOnboarding) {
+      // Returning user
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SigninScreen()),
+      );
+    } else {
+      // New user
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => OnboardingScreen()),
+      );
+    }
   }
 
   @override
