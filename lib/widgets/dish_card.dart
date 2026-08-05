@@ -21,7 +21,7 @@ class DishCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(10), // 🔽 slightly reduced
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey.shade300),
@@ -32,7 +32,6 @@ class DishCard extends StatelessWidget {
             children: [
               const SizedBox(height: 6),
 
-              // 🔥 OPTIMIZED IMAGE
               ClipRRect(
                 borderRadius: BorderRadius.circular(50),
                 child: Image.asset(
@@ -40,7 +39,7 @@ class DishCard extends StatelessWidget {
                   width: 70,
                   height: 70,
                   fit: BoxFit.cover,
-                  cacheWidth: 150, // 🔥 HUGE performance boost
+                  cacheWidth: 150,
                 ),
               ),
 
@@ -62,12 +61,12 @@ class DishCard extends StatelessWidget {
               Text(
                 '₦$price',
                 style: const TextStyle(
-                  fontSize: 16, // 🔽 slightly reduced
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
 
-              const Spacer(),
+              const SizedBox(height: 30),
 
               SizedBox(
                 height: 34,
@@ -92,13 +91,13 @@ class DishCard extends StatelessWidget {
             ],
           ),
 
-          // ❤️ Favorite icon
+          // Favorite icon
           Positioned(
             top: 0,
             right: 0,
             child: IconButton(
               onPressed: onFavoriteToggle,
-              splashRadius: 18, // 🔥 smaller = lighter
+              splashRadius: 18,
               icon: Icon(
                 isFavorite ? Icons.favorite : Icons.favorite_border,
                 size: 20,

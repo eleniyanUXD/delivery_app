@@ -16,41 +16,22 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     checkFirstTimeUser();
-
-    Future.delayed(const Duration(seconds: 10), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) {
-            return OnboardingScreen();
-          },
-        ),
-      );
-    });
   }
 
-  void checkFirstTimeUser() async {
+  Future<void> checkFirstTimeUser() async {
+    await Future.delayed(const Duration(seconds: 2)); // splash duration
+
     final prefs = await SharedPreferences.getInstance();
-
     bool seenOnboarding = prefs.getBool('seenOnboarding') ?? false;
-
-    await Future.delayed(const Duration(seconds: 2));
 
     if (!mounted) return;
 
-    if (seenOnboarding) {
-      // Returning user
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => SigninScreen()),
-      );
-    } else {
-      // New user
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => OnboardingScreen()),
-      );
-    }
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => seenOnboarding ? SigninScreen() : OnboardingScreen(),
+      ),
+    );
   }
 
   @override

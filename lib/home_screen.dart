@@ -5,6 +5,7 @@ import 'package:delivery_app/models/category_model.dart';
 import 'package:delivery_app/models/featured_resturant_model.dart';
 import 'package:delivery_app/models/dish_model.dart';
 import 'package:delivery_app/cart_item.dart';
+import 'package:delivery_app/models/favorite_data.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -40,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          // 🔹 HEADER
+          // HEADER
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 50, 16, 20),
@@ -87,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-          // 🔹 SEARCH BAR
+          // SEARCH BAR
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -99,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-          // 🔹 BANNER
+          // BANNER
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(16),
@@ -115,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-          // 🔹 CATEGORIES TITLE
+          // CATEGORIES TITLE
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
@@ -128,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
           const SliverToBoxAdapter(child: SizedBox(height: 12)),
 
-          // 🔹 CATEGORIES LIST
+          //  CATEGORIES LIST
           SliverToBoxAdapter(
             child: SizedBox(
               height: 100,
@@ -179,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
           const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
-          // 🔹 FEATURED TITLE
+          // FEATURED TITLE
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
@@ -192,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
           const SliverToBoxAdapter(child: SizedBox(height: 12)),
 
-          // 🔹 FEATURED LIST
+          //  FEATURED LIST
           SliverToBoxAdapter(
             child: SizedBox(
               height: 120,
@@ -236,7 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
           const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
-          // 🔹 POPULAR TITLE
+          // POPULAR TITLE
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
@@ -249,7 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
           const SliverToBoxAdapter(child: SizedBox(height: 12)),
 
-          // 🔥 GRID (MAIN FIX)
+          // GRID (MAIN FIX)
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             sliver: SliverGrid(
@@ -260,11 +261,29 @@ class _HomeScreenState extends State<HomeScreen> {
                   name: dish.name,
                   image: dish.imagePath,
                   price: dish.price.toString(),
-                  isFavorite: dish.isFavorite,
+                  isFavorite: FavoriteData.items.any(
+                    (item) => item['name'] == dish.name,
+                  ),
                   onFavoriteToggle: () {
                     setState(() {
-                      dish.isFavorite = !dish.isFavorite;
+                      final exists = FavoriteData.items.any(
+                        (item) => item['name'] == dish.name,
+                      );
+
+                      if (exists) {
+                        FavoriteData.items.removeWhere(
+                          (item) => item['name'] == dish.name,
+                        );
+                      } else {
+                        FavoriteData.items.add({
+                          'name': dish.name,
+                          'image': dish.imagePath,
+                          'price': dish.price.toString(),
+                        });
+                      }
                     });
+
+                    print(FavoriteData.items);
                   },
                   onAddToCart: () {
                     setState(() {
