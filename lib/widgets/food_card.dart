@@ -84,7 +84,7 @@ class FoodCard extends StatelessWidget {
                     const Spacer(),
 
                     Text(
-                      '\$${price.toStringAsFixed(2)}',
+                      '₦${price.toStringAsFixed(2)}',
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,

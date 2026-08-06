@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'widgets/checkout_details_card.dart';
 import 'widgets/cart_summary.dart';
-import 'cart_data.dart';
 import 'payment_detail_screen.dart';
 
 class CheckoutScreen extends StatefulWidget {
-  const CheckoutScreen({super.key});
+  final List cartItems;
+  const CheckoutScreen({super.key, required this.cartItems});
 
   @override
   State<CheckoutScreen> createState() {
@@ -25,7 +25,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     super.initState();
   }
 
-  double deliveryFee = 2.0;
+  double deliveryFee = 500.0;
   double getSubTotal() {
     return getTotalPrice();
   }
@@ -36,7 +36,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   double getTotalPrice() {
     double total = 0.0;
-    for (var item in cartItems) {
+    for (var item in widget.cartItems) {
       total += (item.price as num) * (item.quantity as num);
     }
     return total;

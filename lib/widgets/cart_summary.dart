@@ -33,11 +33,11 @@ class CartSummary extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _buildRow("Selected item", "\$${subtotal.toStringAsFixed(2)}"),
+          _buildRow("Selected item", '₦${subtotal.toStringAsFixed(2)}'),
           const SizedBox(height: 8),
           _buildRow(
-            "Delivery & handling",
-            "\$${deliveryFee.toStringAsFixed(2)}",
+            'Delivery & handling',
+            '₦${deliveryFee.toStringAsFixed(2)}',
           ),
           const SizedBox(height: 12),
 
@@ -45,7 +45,7 @@ class CartSummary extends StatelessWidget {
 
           const SizedBox(height: 12),
 
-          _buildRow("Subtotal", "\$${total.toStringAsFixed(2)}", isBold: true),
+          _buildRow("Subtotal", '\₦${total.toStringAsFixed(2)}', isBold: true),
 
           const SizedBox(height: 16),
 

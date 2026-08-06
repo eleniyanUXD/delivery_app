@@ -76,10 +76,10 @@ class DishCard extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                     padding: EdgeInsets.zero,
-                    elevation: 0, // 🔥 reduces GPU work
+                    elevation: 0, 
                   ),
                   child: const Text(
-                    "Add to Cart",
+                    'Add to Cart',
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,

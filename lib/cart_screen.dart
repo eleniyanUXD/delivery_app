@@ -19,7 +19,7 @@ class _CartScreenState extends State<CartScreen> {
     super.initState();
   }
 
-  double deliveryFee = 2.0;
+  double deliveryFee = 500.0;
   double getSubTotal() {
     return getTotalPrice();
   }
@@ -104,7 +104,7 @@ class _CartScreenState extends State<CartScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) {
-                          return CheckoutScreen();
+                          return CheckoutScreen(cartItems: widget.cart);
                         },
                       ),
                     );
