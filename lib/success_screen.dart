@@ -1,3 +1,4 @@
+import 'package:delivery_app/main_navigation_screen.dart';
 import 'package:flutter/material.dart';
 import 'widgets/success_card.dart';
 import 'widgets/app_button.dart';
@@ -48,7 +49,7 @@ class SuccessScreen extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return const HomeScreen();
+                        return const MainNavigationScreen();
                       },
                     ),
                   );

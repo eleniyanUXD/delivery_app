@@ -4,6 +4,7 @@ import 'widgets/scan_card_button.dart';
 import 'widgets/check_box_field.dart';
 import 'widgets/app_button.dart';
 import 'success_screen.dart';
+import 'package:flutter_credit_card/flutter_credit_card.dart';
 
 class PaymentDetailScreen extends StatefulWidget {
   const PaymentDetailScreen({super.key});
@@ -19,6 +20,15 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
   final expiryDateController = TextEditingController();
   final cvvController = TextEditingController();
   bool isSaved = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    cardNumberController.addListener(() => setState(() {}));
+    expiryDateController.addListener(() => setState(() {}));
+    cvvController.addListener(() => setState(() {}));
+  }
 
   @override
   void dispose() {
@@ -44,6 +54,20 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(
+              width: double.infinity,
+              child: CreditCardWidget(
+                cardNumber: cardNumberController.text,
+                expiryDate: expiryDateController.text,
+                cardHolderName: "Your Name",
+                cvvCode: cvvController.text,
+                showBackView: false,
+                onCreditCardWidgetChange: (brand) {},
+                cardBgColor: const Color.fromARGB(255, 6, 114, 9),
+              ),
+            ),
+
+            const SizedBox(height: 20),
             CardInputField(
               label: 'Card Number',
               hintText: '1234 5678 9012 3456',
@@ -95,7 +119,11 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
             ScanCardButton(
               text: 'Scan Card',
               onTap: () {
-                // Handle scan card action
+                setState(() {
+                  cardNumberController.text = "4242 4242 4242 4242";
+                  expiryDateController.text = "12/26";
+                  cvvController.text = "123";
+                });
               },
               icon: 'assets/icons/scan_icon.svg',
             ),

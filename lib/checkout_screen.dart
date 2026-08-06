@@ -6,6 +6,8 @@ import 'widgets/checkout_details_card.dart';
 import 'widgets/cart_summary.dart';
 import 'payment_detail_screen.dart';
 
+
+
 class CheckoutScreen extends StatefulWidget {
   final List cartItems;
   const CheckoutScreen({super.key, required this.cartItems});
