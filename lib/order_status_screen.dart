@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'widgets/order_step.dart';
 import 'widgets/app_button.dart';
-import 'home_screen.dart';
+import 'main_navigation_screen.dart';
 
 class OrderStatusScreen extends StatefulWidget {
   const OrderStatusScreen({super.key});
@@ -130,7 +130,7 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> {
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                    return const HomeScreen();
+                    return const MainNavigationScreen();
                   },
                 ),
               );
