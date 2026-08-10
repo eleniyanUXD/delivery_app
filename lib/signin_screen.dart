@@ -130,6 +130,15 @@ class _SigninScreenState extends State<SigninScreen> {
                 controller: emailController,
                 decoration: InputDecoration(
                   labelText: 'Email',
+                  labelStyle: TextStyle(color: Colors.grey.shade600),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey.shade400),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
                   contentPadding: const EdgeInsets.symmetric(
                     vertical: 10,
                     horizontal: 16,
@@ -147,6 +156,15 @@ class _SigninScreenState extends State<SigninScreen> {
                 obscureText: _obscurePassword,
                 decoration: InputDecoration(
                   labelText: 'Password',
+                  labelStyle: TextStyle(color: Colors.grey.shade600),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey.shade400),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
                   suffixIcon: IconButton(
                     icon: Icon(
                       _obscurePassword

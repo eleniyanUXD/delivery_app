@@ -75,7 +75,7 @@ class _SignupScreenState extends State<SignupScreen> {
         context,
       ).showSnackBar(SnackBar(content: Text("Error: $e")));
     } finally {
-      setState(() => isLoading = false); 
+      setState(() => isLoading = false);
     }
   }
 
@@ -113,6 +113,15 @@ class _SignupScreenState extends State<SignupScreen> {
               TextField(
                 decoration: InputDecoration(
                   labelText: 'Name',
+                  labelStyle: TextStyle(color: Colors.grey.shade600),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey.shade400),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
                   contentPadding: const EdgeInsets.symmetric(
                     vertical: 10,
                     horizontal: 16,
@@ -129,6 +138,15 @@ class _SignupScreenState extends State<SignupScreen> {
                 controller: emailController,
                 decoration: InputDecoration(
                   labelText: 'Email address',
+                  labelStyle: TextStyle(color: Colors.grey.shade600),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey.shade400),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
                   contentPadding: const EdgeInsets.symmetric(
                     vertical: 10,
                     horizontal: 16,
@@ -146,6 +164,15 @@ class _SignupScreenState extends State<SignupScreen> {
                 obscureText: _obscurePassword,
                 decoration: InputDecoration(
                   labelText: 'Password',
+                  labelStyle: TextStyle(color: Colors.grey.shade600),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey.shade400),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
                   suffixIcon: IconButton(
                     icon: Icon(
                       _obscurePassword
@@ -175,6 +202,15 @@ class _SignupScreenState extends State<SignupScreen> {
                 obscureText: _obscureConfirmPassword,
                 decoration: InputDecoration(
                   labelText: 'Confirm password',
+                  labelStyle: TextStyle(color: Colors.grey.shade600),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey.shade400),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
                   suffixIcon: IconButton(
                     icon: Icon(
                       _obscureConfirmPassword
