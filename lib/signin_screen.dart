@@ -6,6 +6,7 @@ import 'social_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'signup_screen.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'forgot_password_screen.dart';
 
 class SigninScreen extends StatefulWidget {
   const SigninScreen({super.key});
@@ -106,7 +107,7 @@ class _SigninScreenState extends State<SigninScreen> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
+          padding: const EdgeInsets.fromLTRB(16, 70, 16, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -214,7 +215,12 @@ class _SigninScreenState extends State<SigninScreen> {
                   ),
                   TextButton(
                     onPressed: () {
-                      // TODO: Navigate to Forgot Password screen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ForgotPasswordScreen(),
+                        ),
+                      );
                     },
                     child: const Text(
                       'Forgot Password?',
