@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'edit_screen.dart';
 import 'package:delivery_app/services/auth_service.dart';
 import 'package:delivery_app/widgets/logout_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -13,9 +15,31 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  String name = 'Abdulrauf Fuad';
-  String number = '08054551951';
-  String email = 'Hassanfuad05@gmail.com';
+  String name = 'User';
+  String number = '';
+  String email = '';
+
+  @override
+  void initState() {
+    super.initState();
+    loadUserProfile();
+  }
+
+  Future<void> loadUserProfile() async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) return;
+
+    final prefs = await SharedPreferences.getInstance();
+
+    if (!mounted) return;
+
+    setState(() {
+      name = user.displayName ?? 'User';
+      email = user.email ?? '';
+      number = prefs.getString('phone') ?? '';
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

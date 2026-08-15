@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'social_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -17,7 +18,9 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
@@ -25,59 +28,123 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   void dispose() {
+    nameController.dispose();
     emailController.dispose();
+    phoneController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
     super.dispose();
   }
 
   void handleSignUp() async {
-    if (passwordController.text.trim() !=
-        confirmPasswordController.text.trim()) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Passwords do not match')));
-      return;
+  if (nameController.text.trim().isEmpty ||
+      emailController.text.trim().isEmpty ||
+      phoneController.text.trim().isEmpty ||
+      passwordController.text.trim().isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Please fill all fields')),
+    );
+    return;
+  }
+
+  if (passwordController.text.trim() !=
+      confirmPasswordController.text.trim()) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Passwords do not match')),
+    );
+    return;
+  }
+
+  setState(() => isLoading = true);
+
+  try {
+    print('========== SIGNUP START ==========');
+
+    // 1. Create Firebase Auth account
+    print('1. Creating Firebase Auth account...');
+
+    final userCredential = await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+    );
+
+    print('2. Firebase Auth account created');
+
+    final user = userCredential.user;
+
+    if (user == null) {
+      throw Exception('Firebase user is null');
     }
 
-    setState(() => isLoading = true);
+    // 2. Save name to Firebase Authentication
+    print('3. Saving name...');
 
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-      );
+    await user.updateDisplayName(
+      nameController.text.trim(),
+    );
 
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Signup successful')));
+    print('4. Name saved');
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
-      );
-    } on FirebaseAuthException catch (e) {
-      String message = "Signup failed";
+    // 3. Save phone number using SharedPreferences
+    print('5. Saving phone number...');
 
-      if (e.code == 'email-already-in-use') {
-        message = "Email already in use";
-      } else if (e.code == 'weak-password') {
-        message = "Password is too weak";
-      } else if (e.code == 'invalid-email') {
-        message = "Invalid email address";
-      }
+    final prefs = await SharedPreferences.getInstance();
 
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(message)));
-    } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Error: $e")));
-    } finally {
+    await prefs.setString(
+      'phone',
+      phoneController.text.trim(),
+    );
+
+    print('6. Phone number saved');
+
+    // 4. Reload Firebase user
+    await user.reload();
+
+    print('7. User reloaded');
+
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Signup successful')),
+    );
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const MainNavigationScreen(),
+      ),
+    );
+
+    print('========== SIGNUP COMPLETE ==========');
+  } on FirebaseAuthException catch (e) {
+    print('FIREBASE AUTH ERROR');
+    print('CODE: ${e.code}');
+    print('MESSAGE: ${e.message}');
+
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          e.message ?? 'Firebase signup failed',
+        ),
+      ),
+    );
+  } catch (e) {
+    print('GENERAL ERROR: $e');
+
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error: $e')),
+    );
+  } finally {
+    if (mounted) {
       setState(() => isLoading = false);
     }
   }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -111,6 +178,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
               // Name field
               TextField(
+                controller: nameController,
                 decoration: InputDecoration(
                   labelText: 'Name',
                   labelStyle: TextStyle(color: Colors.grey.shade600),
@@ -156,6 +224,33 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 ),
               ),
+              const SizedBox(height: 14),
+
+              // Phone number field
+              TextField(
+                controller: phoneController,
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(
+                  labelText: 'Phone number',
+                  labelStyle: TextStyle(color: Colors.grey.shade600),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey.shade400),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 16,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+
               const SizedBox(height: 14),
 
               // Password field

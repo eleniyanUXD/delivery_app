@@ -6,6 +6,8 @@ import 'package:delivery_app/models/featured_resturant_model.dart';
 import 'package:delivery_app/models/dish_model.dart';
 import 'package:delivery_app/cart_item.dart';
 import 'package:delivery_app/models/favorite_data.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -60,16 +62,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(width: 12),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
+                    children: [
+                      const Text(
                         'Welcome back',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      SizedBox(height: 3),
-                      Text('Eleniyan', style: TextStyle(fontSize: 16)),
+                      const SizedBox(height: 3),
+                      Text(
+                        FirebaseAuth.instance.currentUser?.displayName ?? 'User',
+                        style: const TextStyle(fontSize: 16),
+                      ),
                     ],
                   ),
                   const Spacer(),
