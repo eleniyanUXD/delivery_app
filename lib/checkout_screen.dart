@@ -1,3 +1,4 @@
+import 'package:delivery_app/success_screen.dart';
 import 'package:delivery_app/widgets/add_new_card_button.dart';
 import 'package:delivery_app/widgets/change_location_card.dart';
 import 'package:flutter/material.dart';
@@ -5,8 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'widgets/checkout_details_card.dart';
 import 'widgets/cart_summary.dart';
 import 'payment_detail_screen.dart';
-
-
+import 'models/address_model.dart';
 
 class CheckoutScreen extends StatefulWidget {
   final List cartItems;
@@ -20,6 +20,12 @@ class CheckoutScreen extends StatefulWidget {
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
+  AddressModel selectedAddress = AddressModel(
+    displayName: 'Ikeja Road, Apt 112, Lagos, Nigeria',
+    latitude: 6.6018,
+    longitude: 3.3515,
+  );
+
   int selectedPaymentIndex = 0;
 
   @override
@@ -59,7 +65,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
         children: [
-          ChangeLocationCard(), const SizedBox(height: 22),
+          ChangeLocationCard(
+            address: selectedAddress,
+            onAddressChanged: (newAddress) {
+              setState(() {
+                selectedAddress = newAddress;
+              });
+            },
+          ),
+
+          const SizedBox(height: 22),
 
           // checkout detals options
           Text(
@@ -145,7 +160,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         deliveryFee: deliveryFee,
         buttonText: 'Confirm Payment',
         onCheckout: () {
-          // Handle checkout action here
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SuccessScreen()),
+          );
         },
       ),
     );

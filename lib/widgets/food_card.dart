@@ -81,12 +81,13 @@ class FoodCard extends StatelessWidget {
 
                     _qtyButton(Icons.add, onAdd, size: 16),
 
-                    const Spacer(),
+                    const SizedBox(width: 24),
 
                     Text(
                       '₦${price.toStringAsFixed(2)}',
+                      textAlign: TextAlign.right,
                       style: const TextStyle(
-                        fontSize: 20,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -100,8 +101,9 @@ class FoodCard extends StatelessWidget {
 
           // Delete button
           Container(
-            height: 38,
-            width: 38,
+            height: 36,
+            width: 36,
+            alignment: Alignment.center,
             decoration: BoxDecoration(
               color: Colors.redAccent,
               borderRadius: BorderRadius.circular(12),
@@ -122,8 +124,8 @@ class FoodCard extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(8),
       child: Container(
-        width: 28,
-        height: 28,
+        width: 24,
+        height: 24,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.green),
           borderRadius: BorderRadius.circular(8),

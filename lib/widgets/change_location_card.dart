@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:delivery_app/models/address_model.dart';
+import '../change_address_screen.dart';
 
 class ChangeLocationCard extends StatelessWidget {
-  const ChangeLocationCard({super.key});
+  final AddressModel address;
+  final Function(AddressModel) onAddressChanged;
+
+  const ChangeLocationCard({
+    super.key,
+    required this.address,
+    required this.onAddressChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,19 +29,20 @@ class ChangeLocationCard extends StatelessWidget {
 
             const SizedBox(width: 12),
 
-            // Title text and subtitle text
-            const Expanded(
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     "Home",
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
                   ),
-                  SizedBox(height: 4),
+
+                  const SizedBox(height: 4),
+
                   Text(
-                    "Ikeja Road, Apt 112, Lagos, Nigeria",
-                    style: TextStyle(
+                    address.displayName,
+                    style: const TextStyle(
                       fontSize: 13,
                       color: Color.fromARGB(200, 90, 82, 82),
                       fontWeight: FontWeight.w500,
@@ -44,16 +54,26 @@ class ChangeLocationCard extends StatelessWidget {
 
             const SizedBox(width: 10),
 
-            // BUTTON (pushed to far right)
             OutlinedButton(
-              onPressed: () {},
+              onPressed: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ChangeAddressScreen(),
+                  ),
+                );
+
+                if (result != null && result is AddressModel) {
+                  onAddressChanged(result);
+                }
+              },
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 14,
                   vertical: 6,
                 ),
                 foregroundColor: Colors.green,
-                side: BorderSide(color: Colors.green, width: 1.5),
+                side: const BorderSide(color: Colors.green, width: 1.5),
               ),
               child: const Text(
                 'Change',

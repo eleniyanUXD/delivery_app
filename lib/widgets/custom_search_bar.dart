@@ -6,6 +6,7 @@ class CustomSearchBar extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
   final VoidCallback? onTap;
+  final ValueChanged<String>? onChanged;
   final List<CartItem> cart;
 
   const CustomSearchBar({
@@ -13,6 +14,7 @@ class CustomSearchBar extends StatelessWidget {
     required this.controller,
     this.hintText = 'Search...',
     this.onTap,
+    this.onChanged,
     required this.cart,
   });
 
@@ -39,6 +41,7 @@ class CustomSearchBar extends StatelessWidget {
                       hintText: hintText,
                       border: InputBorder.none,
                     ),
+                    onChanged: onChanged,
                   ),
                 ),
               ],

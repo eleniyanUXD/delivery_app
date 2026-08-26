@@ -23,13 +23,36 @@ class _HomeScreenState extends State<HomeScreen> {
   List<FeaturedResturantModel> featuredRestaurant = [];
   List<CartItem> cart = [];
   List<DishModel> dishes = [];
+  List<DishModel> searchResults = [];
+  bool isSearching = false;
 
   @override
   void initState() {
     super.initState();
+
     categories = CategoryModel.getCategories();
     featuredRestaurant = FeaturedResturantModel.getFeaturedRestaurant();
+
     dishes = DishModel.getDishes();
+    searchResults = dishes;
+  }
+
+  void searchFood(String query) {
+    final searchQuery = query.trim().toLowerCase();
+
+    setState(() {
+      if (searchQuery.isEmpty) {
+        isSearching = false;
+        searchResults = dishes;
+        return;
+      }
+
+      isSearching = true;
+
+      searchResults = dishes.where((dish) {
+        return dish.name.toLowerCase().contains(searchQuery);
+      }).toList();
+    });
   }
 
   @override
@@ -72,7 +95,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       const SizedBox(height: 3),
                       Text(
-                        FirebaseAuth.instance.currentUser?.displayName ?? 'User',
+                        FirebaseAuth.instance.currentUser?.displayName ??
+                            'User',
                         style: const TextStyle(fontSize: 16),
                       ),
                     ],
@@ -101,91 +125,96 @@ class _HomeScreenState extends State<HomeScreen> {
                 controller: searchController,
                 hintText: 'Search food restaurants',
                 cart: cart,
+                onChanged: searchFood,
               ),
             ),
           ),
 
           // BANNER
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: Image.asset(
-                  'assets/images/banner.png',
-                  height: 150,
-                  fit: BoxFit.contain,
-                  cacheWidth: 600,
+          if (!isSearching)
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Image.asset(
+                    'assets/images/banner.png',
+                    height: 150,
+                    fit: BoxFit.contain,
+                    cacheWidth: 600,
+                  ),
                 ),
               ),
             ),
-          ),
 
           // CATEGORIES TITLE
-          const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                'Categories',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+          if (!isSearching) ...[
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  'Categories',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                ),
               ),
             ),
-          ),
 
-          const SliverToBoxAdapter(child: SizedBox(height: 12)),
+            const SliverToBoxAdapter(child: SizedBox(height: 12)),
 
-          //  CATEGORIES LIST
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: 100,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                itemCount: categories.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 20),
-                itemBuilder: (context, index) {
-                  final category = categories[index];
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 100,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  itemCount: categories.length,
+                  separatorBuilder: (_, __) => const SizedBox(width: 20),
+                  itemBuilder: (context, index) {
+                    final category = categories[index];
 
-                  return Container(
-                    width: 100,
-                    decoration: BoxDecoration(
-                      color: category.boxColor.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 40,
-                          width: 40,
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Image.asset(
-                              category.imagePath,
-                              cacheWidth: 80,
+                    return Container(
+                      width: 100,
+                      decoration: BoxDecoration(
+                        color: category.boxColor.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 40,
+                            width: 40,
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Image.asset(
+                                category.imagePath,
+                                cacheWidth: 80,
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          category.name,
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                      ],
-                    ),
-                  );
-                },
+                          const SizedBox(height: 4),
+                          Text(
+                            category.name,
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
-          ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
+          ],
 
           const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
-          // FEATURED TITLE
+          // Featured restaurant
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
@@ -198,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
           const SliverToBoxAdapter(child: SizedBox(height: 12)),
 
-          //  FEATURED LIST
+          //  Featured restaurant list
           SliverToBoxAdapter(
             child: SizedBox(
               height: 120,
@@ -243,12 +272,15 @@ class _HomeScreenState extends State<HomeScreen> {
           const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
           // POPULAR TITLE
-          const SliverToBoxAdapter(
+          SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
-                'Popular food',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                isSearching ? 'Search results' : 'Popular food',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           ),
@@ -259,57 +291,62 @@ class _HomeScreenState extends State<HomeScreen> {
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             sliver: SliverGrid(
-              delegate: SliverChildBuilderDelegate((context, index) {
-                final dish = dishes[index];
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final dish = isSearching
+                      ? searchResults[index]
+                      : dishes[index];
 
-                return DishCard(
-                  name: dish.name,
-                  image: dish.imagePath,
-                  price: dish.price.toString(),
-                  isFavorite: FavoriteData.items.any(
-                    (item) => item['name'] == dish.name,
-                  ),
-                  onFavoriteToggle: () {
-                    setState(() {
-                      final exists = FavoriteData.items.any(
-                        (item) => item['name'] == dish.name,
-                      );
-
-                      if (exists) {
-                        FavoriteData.items.removeWhere(
+                  return DishCard(
+                    name: dish.name,
+                    image: dish.imagePath,
+                    price: dish.price.toString(),
+                    isFavorite: FavoriteData.items.any(
+                      (item) => item['name'] == dish.name,
+                    ),
+                    onFavoriteToggle: () {
+                      setState(() {
+                        final exists = FavoriteData.items.any(
                           (item) => item['name'] == dish.name,
                         );
-                      } else {
-                        FavoriteData.items.add({
-                          'name': dish.name,
-                          'image': dish.imagePath,
-                          'price': dish.price.toString(),
-                        });
-                      }
-                    });
 
-                    print(FavoriteData.items);
-                  },
-                  onAddToCart: () {
-                    setState(() {
-                      cart.add(
-                        CartItem(
-                          id: index,
-                          title: dish.name,
-                          subtitle: 'Delicious food',
-                          price: dish.price.toDouble(),
-                          image: dish.imagePath,
-                          quantity: 1,
-                        ),
+                        if (exists) {
+                          FavoriteData.items.removeWhere(
+                            (item) => item['name'] == dish.name,
+                          );
+                        } else {
+                          FavoriteData.items.add({
+                            'name': dish.name,
+                            'image': dish.imagePath,
+                            'price': dish.price.toString(),
+                          });
+                        }
+                      });
+
+                      print(FavoriteData.items);
+                    },
+                    onAddToCart: () {
+                      setState(() {
+                        cart.add(
+                          CartItem(
+                            id: index,
+                            title: dish.name,
+                            subtitle: 'Delicious food',
+                            price: dish.price.toDouble(),
+                            image: dish.imagePath,
+                            quantity: 1,
+                          ),
+                        );
+                      });
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('${dish.name} added to cart!')),
                       );
-                    });
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('${dish.name} added to cart!')),
-                    );
-                  },
-                );
-              }, childCount: dishes.length),
+                    },
+                  );
+                },
+                childCount: isSearching ? searchResults.length : dishes.length,
+              ),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 12,
