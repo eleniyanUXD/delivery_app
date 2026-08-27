@@ -1,10 +1,10 @@
-import 'package:delivery_app/home_screen.dart';
-import 'package:delivery_app/main_navigation_screen.dart';
+import 'package:delivery_app/screens/home_screen.dart';
+import 'package:delivery_app/screens/main_navigation_screen.dart';
 import 'package:delivery_app/phone_verification.dart';
-import 'package:delivery_app/signin_screen.dart';
+import 'package:delivery_app/screens/signin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'social_button.dart';
+import '../widgets/social_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

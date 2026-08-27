@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:delivery_app/models/address_model.dart';
-import '../change_address_screen.dart';
+import '../screens/change_address_screen.dart';
 
 class ChangeLocationCard extends StatelessWidget {
   final AddressModel address;

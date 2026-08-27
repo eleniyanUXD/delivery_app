@@ -4,7 +4,7 @@ import 'package:delivery_app/widgets/custom_search_bar.dart';
 import 'package:delivery_app/models/category_model.dart';
 import 'package:delivery_app/models/featured_resturant_model.dart';
 import 'package:delivery_app/models/dish_model.dart';
-import 'package:delivery_app/cart_item.dart';
+import 'package:delivery_app/data/cart_item.dart';
 import 'package:delivery_app/models/favorite_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

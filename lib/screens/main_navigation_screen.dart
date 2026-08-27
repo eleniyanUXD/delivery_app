@@ -1,10 +1,10 @@
-import 'package:delivery_app/chat_screen.dart';
-import 'package:delivery_app/favorite_screen.dart';
-import 'package:delivery_app/profile_screen.dart';
+import 'package:delivery_app/screens/chat_screen.dart';
+import 'package:delivery_app/screens/favorite_screen.dart';
+import 'package:delivery_app/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
 import 'package:delivery_app/widgets/custom_nav_bar.dart';
-import '../models/custom_nav_bar_model.dart';
+import '../../models/custom_nav_bar_model.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
-import 'main_navigation_screen.dart';
+import 'screens/main_navigation_screen.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
   final String verificationId;

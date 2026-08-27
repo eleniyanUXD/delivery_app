@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'models/address_model.dart';
-import 'widgets/change_address_map.dart';
-import 'widgets/search_field.dart';
-import 'services/address_service.dart';
+import '../models/address_model.dart';
+import '../widgets/change_address_map.dart';
+import '../widgets/search_field.dart';
+import '../services/address_service.dart';
 
 class ChangeAddressScreen extends StatefulWidget {
   const ChangeAddressScreen({super.key});

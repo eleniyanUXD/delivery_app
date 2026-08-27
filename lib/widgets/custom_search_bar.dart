@@ -1,5 +1,5 @@
-import 'package:delivery_app/cart_screen.dart';
-import 'package:delivery_app/cart_item.dart';
+import 'package:delivery_app/screens/cart_screen.dart';
+import 'package:delivery_app/data/cart_item.dart';
 import 'package:flutter/material.dart';
 
 class CustomSearchBar extends StatelessWidget {

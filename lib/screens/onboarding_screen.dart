@@ -1,7 +1,7 @@
-import 'package:delivery_app/signup_screen.dart';
+import 'package:delivery_app/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
-import 'models/onboarding_model.dart';
-import 'widgets/onboarding_page.dart';
+import '../models/onboarding_model.dart';
+import '../widgets/onboarding_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingScreen extends StatefulWidget {

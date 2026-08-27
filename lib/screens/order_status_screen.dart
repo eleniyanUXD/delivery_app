@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'widgets/order_step.dart';
-import 'widgets/app_button.dart';
+import '../widgets/order_step.dart';
+import '../widgets/app_button.dart';
 import 'main_navigation_screen.dart';
 
 class OrderStatusScreen extends StatefulWidget {

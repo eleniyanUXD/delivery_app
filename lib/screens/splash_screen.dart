@@ -1,6 +1,6 @@
-import 'package:delivery_app/signin_screen.dart';
+import 'package:delivery_app/screens/signin_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:delivery_app/onboarding_screen.dart';
+import 'package:delivery_app/screens/onboarding_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {

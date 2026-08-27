@@ -1,12 +1,12 @@
-import 'package:delivery_app/success_screen.dart';
+import 'package:delivery_app/screens/success_screen.dart';
 import 'package:delivery_app/widgets/add_new_card_button.dart';
 import 'package:delivery_app/widgets/change_location_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'widgets/checkout_details_card.dart';
-import 'widgets/cart_summary.dart';
+import '../widgets/checkout_details_card.dart';
+import '../widgets/cart_summary.dart';
 import 'payment_detail_screen.dart';
-import 'models/address_model.dart';
+import '../models/address_model.dart';
 
 class CheckoutScreen extends StatefulWidget {
   final List cartItems;

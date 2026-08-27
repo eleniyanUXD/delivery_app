@@ -1,7 +1,7 @@
-import 'package:delivery_app/cart_item.dart';
+import 'package:delivery_app/data/cart_item.dart';
 import 'package:flutter/material.dart';
 import 'package:delivery_app/widgets/food_card.dart';
-import 'widgets/cart_summary.dart';
+import '../widgets/cart_summary.dart';
 import 'checkout_screen.dart';
 
 class CartScreen extends StatefulWidget {

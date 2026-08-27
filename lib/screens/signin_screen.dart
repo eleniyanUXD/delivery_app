@@ -1,8 +1,8 @@
-import 'package:delivery_app/home_screen.dart';
-import 'package:delivery_app/main_navigation_screen.dart';
+import 'package:delivery_app/screens/home_screen.dart';
+import 'package:delivery_app/screens/main_navigation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'social_button.dart';
+import '../widgets/social_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'signup_screen.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -96,15 +96,7 @@ class _SigninScreenState extends State<SigninScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
+      appBar: AppBar(automaticallyImplyLeading: false),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 70, 16, 0),

@@ -2,7 +2,7 @@ import 'package:delivery_app/widgets/card_input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'OTPverification_screen.dart';
-import 'main_navigation_screen.dart';
+import 'screens/main_navigation_screen.dart';
 
 class PhoneVerificationScreen extends StatefulWidget {
   const PhoneVerificationScreen({super.key});

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'widgets/card_input_field.dart';
-import 'widgets/scan_card_button.dart';
-import 'widgets/check_box_field.dart';
-import 'widgets/app_button.dart';
+import '../widgets/card_input_field.dart';
+import '../widgets/scan_card_button.dart';
+import '../widgets/check_box_field.dart';
+import '../widgets/app_button.dart';
 import 'success_screen.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 

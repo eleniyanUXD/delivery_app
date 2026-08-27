@@ -1,7 +1,7 @@
-import 'package:delivery_app/main_navigation_screen.dart';
+import 'package:delivery_app/screens/main_navigation_screen.dart';
 import 'package:flutter/material.dart';
-import 'widgets/success_card.dart';
-import 'widgets/app_button.dart';
+import '../widgets/success_card.dart';
+import '../widgets/app_button.dart';
 import 'home_screen.dart';
 import 'order_status_screen.dart';
 
