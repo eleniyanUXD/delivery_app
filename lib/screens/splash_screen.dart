@@ -46,13 +46,13 @@ class _SplashScreenState extends State<SplashScreen> {
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
-                color: const Color.fromARGB(178, 43, 211, 49),
+                color: Colors.green,
               ),
             ),
             SizedBox(width: 8),
             Icon(
               Icons.shopping_cart_checkout_outlined,
-              color: const Color.fromARGB(178, 43, 211, 49),
+              color: Colors.green,
               size: 30,
             ),
           ],
